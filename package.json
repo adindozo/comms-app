@@ -1,0 +1,23 @@
+{
+  "name": "comms-app",
+  "version": "1.0.0",
+  "description": "Comms is a real-time audience interaction web app for meetings and events.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adindozo/comms-app.git"
+  },
+  "keywords": [],
+  "author": "adindozo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adindozo/comms-app/issues"
+  },
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2"
+  }
+}
