@@ -1,20 +1,11 @@
 CREATE TABLE accounts (
-    id serial primary key NOT NULL,
-    username varchar(32) NOT NULL,
-    hashpassword char(60) NOT NULL,
+    accountID serial PRIMARY KEY NOT NULL,
+    username varchar(32) UNIQUE  NOT NULL,
+    hashpw char(60) NOT NULL, --hashed password
     role varchar(10) NOT NULL CHECK
         (role='admin' or role='user' ),
     email varchar(320) NOT NULL,
-    banned timestamp,
-    profilepictureid int references profilepictures (id)
-
-
+    verified bool NOT NULL, --if email is verified
+    banneduntil timestamp, --if null user is not banned
+    pictureid int --profile picture filename, can be null
 );
-
-CREATE TABLE profilepictures (
-    id serial primary key ,
-    username varchar(32),
-    password char(60)
-
-);
-
