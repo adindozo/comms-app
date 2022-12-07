@@ -73,7 +73,7 @@ app.post('/register', async (req, res) => {
 
     } catch (error) {
         //register data verification and error handling is done on client-side, 
-        //if user disable JS verification and enter invadil data, 
+        //if user disables JS verification and enters invalid data, 
         //'not acceptable' code will be sent  
         res.sendStatus(406);
     }
