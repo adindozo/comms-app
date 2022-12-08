@@ -15,6 +15,7 @@ const router = express.Router();
 const app = express();
 const port = 8080;
 const bcrypt = require('bcrypt');
+const { use } = require('bcrypt/promises');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
@@ -30,13 +31,13 @@ let dbconfig = { //database credentials stored in object
 const pool = new pg.Pool(dbconfig); //creating db pool
 
 bcrypt.hash('pdsadsa', 10, function (err, hash) {
-    console.log(hash.length)
+    console.log(hash)
     // Store hash in your password DB.
 });
 
 app.get('/register', (req, res) => {
 
-    res.sendFile(__dirname + '/views/register.html');
+    res.render('register');
 
 })
 
@@ -64,18 +65,37 @@ app.post('/register', async (req, res) => {
     
     try {
         let pw=req.body.password;
-        let username=req.body.password;
-        let email=req.body.password;
-        if(!CheckPassword(pw)) throw 'err';
-        if(!CheckUsername(username)) throw 'err';
-        if(!CheckEmail(email)) throw 'err';
+        let username=req.body.username;
+        let email=req.body.email; 
+        if(!CheckPassword(pw)) throw 'client-err'; 
+        if(!CheckUsername(username)) throw 'client-err'; 
+        if(!CheckEmail(email)) throw 'client-err';     
+      
+        
+        //check if email and username are unique
+
+            
+        let email_is_unique = await pool.query('select email from accounts where email=$1', [email]).rowCount==0;
+        let username_is_unique = await pool.query('select username from accounts where username=$1', [username]).rowCount==0;
+        
+        if(!email_is_unique) return res.render('register',{email_existing: 'Email already used for other account.' })
+        if(!username_is_unique) return res.render('register',{username_existing: 'Username already taken.' })
+
+        
         //todo if all good, insert into DB unverified user
+
+        
+        await pool.query(`insert into accounts (username, hashpw, email, verified)  
+        values ('$1','$2','$3',false)'`,[username,hashpw,email]);
+
+       
 
     } catch (error) {
         //register data verification and error handling is done on client-side, 
         //if user disables JS verification and enters invalid data, 
         //'not acceptable' code will be sent  
-        res.sendStatus(406);
+        if(error='client-err') return res.sendStatus(406);
+        res.sendStatus(500); //500 otherwise
     }
 
 })
