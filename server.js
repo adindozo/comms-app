@@ -15,7 +15,15 @@ const router = express.Router();
 const app = express();
 const port = 8080;
 const bcrypt = require('bcrypt');
-const { use } = require('bcrypt/promises');
+const generator = require('generate-password');
+const nodemailer = require('nodemailer');
+
+
+
+
+
+
+
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
@@ -30,10 +38,7 @@ let dbconfig = { //database credentials stored in object
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 
-bcrypt.hash('pdsadsa', 10, function (err, hash) {
-    console.log(hash)
-    // Store hash in your password DB.
-});
+
 
 app.get('/register', (req, res) => {
 
@@ -53,49 +58,100 @@ app.post('/register', async (req, res) => {
         //  A valid username should start with an alphabet so, 
         //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
         //[A-Za-z0-9_] 
-       
+
         let exp = /^[A-Za-z][A-Za-z0-9_]{7,19}$/;
         return (exp.test(txt));
     }
 
-    let CheckEmail = (txt)=>{
+    let CheckEmail = (txt) => {
         let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return (exp.test(txt));
     }
-    
+
     try {
-        let pw=req.body.password;
-        let username=req.body.username;
-        let email=req.body.email; 
-        if(!CheckPassword(pw)) throw 'client-err'; 
-        if(!CheckUsername(username)) throw 'client-err'; 
-        if(!CheckEmail(email)) throw 'client-err';     
-      
-        
+        //check if email and username are valid, checked on client side as well
+        let pw = req.body.password;
+        let username = req.body.username;
+        let email = req.body.email;
+        if (!CheckPassword(pw)) throw 'client-err';
+        if (!CheckUsername(username)) throw 'client-err';
+        if (!CheckEmail(email)) throw 'client-err';
+
+
         //check if email and username are unique
 
-            
-        let email_is_unique = await pool.query('select email from accounts where email=$1', [email]).rowCount==0;
-        let username_is_unique = await pool.query('select username from accounts where username=$1', [username]).rowCount==0;
-        
-        if(!email_is_unique) return res.render('register',{email_existing: 'Email already used for other account.' })
-        if(!username_is_unique) return res.render('register',{username_existing: 'Username already taken.' })
 
-        
-        //todo if all good, insert into DB unverified user
+        let email_is_unique = (await pool.query('select email from accounts where email=$1', [email])).rowCount == 0;
+        let username_is_unique = (await pool.query('select username from accounts where username=$1', [username])).rowCount == 0;
 
-        
-        await pool.query(`insert into accounts (username, hashpw, email, verified)  
-        values ('$1','$2','$3',false)'`,[username,hashpw,email]);
+        if (!email_is_unique) return res.render('register', { email_existing: 'Email already used for other account.' })
 
-       
+        if (!username_is_unique) return res.render('register', { username_existing: 'Username already taken.' })
+
+
+        //if all good, insert into DB unverified user
+
+        let hashpw = await bcrypt.hash(pw, 10);
+        //generate 16-char len email code
+        const code = generator.generate({
+            length: 16,
+            numbers: true
+        });
+
+        await pool.query(`insert into accounts (username, hashpw, email, emailcode, verified)  
+        values ($1,$2,$3,$4,false)`, [username, hashpw, email, code]);
+
+        //send mail with code for verification, for optimization send to user that mail is already sent
+        res.render('verify-email', { email });
+        let transporter = nodemailer.createTransport({
+
+            service: 'Outlook',
+
+            auth: {
+                user: process.env.email,
+                pass: process.env.email_pw
+            }
+        });
+
+        let mailOptions = {
+            from: process.env.email,
+            to: email,
+            subject: 'Comms account verification',
+            text: 'http://localhost:8080/verify/' + code + '/' + username
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+
+            }
+        });
+
 
     } catch (error) {
         //register data verification and error handling is done on client-side, 
         //if user disables JS verification and enters invalid data, 
         //'not acceptable' code will be sent  
-        if(error='client-err') return res.sendStatus(406);
+        if (error == 'client-err') return res.sendStatus(406);
         res.sendStatus(500); //500 otherwise
+        console.log(error)
+    }
+
+})
+app.get('/verify/:code/:username', async (req, res) => {
+    try {
+        let code = req.params.code;
+        let username = req.params.username;
+        let count = (await pool.query(`select username from accounts where emailcode=
+        $1 and username=$2`, [code, username])).rowCount;
+        if (count == 0) return res.sendStatus(404);
+        await pool.query(`update accounts set verified=true, emailcode=null where  
+        username=$1`, [username])
+        req.render('verified',{username});
+    } catch (error) {
+        res.sendStatus(500);
     }
 
 })
