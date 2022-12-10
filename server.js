@@ -18,9 +18,7 @@ const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const nodemailer = require('nodemailer');
 
-
-
-
+//functions for login and register checks
 
 
 
@@ -47,29 +45,32 @@ app.get('/register', (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-    let CheckPassword = (txt) => {
-        // check a password between {7,19} = 8 - 20 characters which contain at least one 
-        // numeric digit, one uppercase and one lowercase letter
-        let exp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,19}$/;
-        return (exp.test(txt));
-    }
-
-    let CheckUsername = (txt) => {
-        //  A valid username should start with an alphabet so, 
-        //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
-        //[A-Za-z0-9_] 
-
-        let exp = /^[A-Za-z][A-Za-z0-9_]{7,19}$/;
-        return (exp.test(txt));
-    }
-
-    let CheckEmail = (txt) => {
-        let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return (exp.test(txt));
-    }
+   
 
     try {
         //check if email and username are valid, checked on client side as well
+        let CheckPassword = (txt) => {
+            // check a password between {7,19} = 8 - 20 characters which contain at least one 
+            // numeric digit, one uppercase and one lowercase letter
+            let exp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,31}$/;
+            return (exp.test(txt));
+        }
+        
+        let CheckUsername = (txt) => {
+            //  A valid username should start with an alphabet so, 
+            //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
+            //[A-Za-z0-9_] 
+        
+            let exp = /^[A-Za-z][A-Za-z0-9_]{3,19}$/;
+            return (exp.test(txt));
+        }
+        
+        let CheckEmail = (txt) => {
+            let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return (exp.test(txt));
+        }
+        
+        
         let pw = req.body.password;
         let username = req.body.username;
         let email = req.body.email;
@@ -92,6 +93,7 @@ app.post('/register', async (req, res) => {
         //if all good, insert into DB unverified user
 
         let hashpw = await bcrypt.hash(pw, 10);
+        
         //generate 16-char len email code
         const code = generator.generate({
             length: 16,
@@ -149,11 +151,33 @@ app.get('/verify/:code/:username', async (req, res) => {
         if (count == 0) return res.sendStatus(404);
         await pool.query(`update accounts set verified=true, emailcode=null where  
         username=$1`, [username])
-        req.render('verified',{username});
+        res.render('verified',{username});
     } catch (error) {
+        console.log(error)
         res.sendStatus(500);
     }
 
+})
+
+app.post('/login',async (req,res)=>{
+   
+    try {
+        let email = req.body.email;
+        let pw = req.body.password;
+        //find user with req email and compare it's password with provided one
+        let user = await pool.query('select hashpw, verified from accounts where email=$1',[email]);
+        if(user.rowCount==0) return res.render('login',{error: 'there is not an acc with that email'});
+        let hashpw = user.rows[0].hashpw;
+        let verified=user.rows[0].verified;
+        console.log(hashpw)
+        let password_is_valid = await bcrypt.compare(pw,hashpw);
+        if(!password_is_valid) return res.render('login',{error: 'wrong password. Forgot password?'});
+        if(!verified) return res.render('login',{error: 'Please verify your email before logging in.'});
+        //from this line is code for successful login
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
