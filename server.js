@@ -163,6 +163,11 @@ app.get('/login', (req, res) => {
     res.render('login');
 })
 
+
+
+
+
+
 app.post('/login', async (req, res) => {
 
     try {
@@ -179,20 +184,24 @@ app.post('/login', async (req, res) => {
         if (!verified) return res.render('login', { error: 'Please verify your email before logging in.' });
         //todo check if user is banned
         let is_banned = Boolean(user.rows[0].banneduntil);
-        if(is_banned){
-            function isDateInPast(date) {
-                // Get the current date and time in milliseconds
-                var currentTime = new Date().getTime();
-              
-                // Get the given date and time in milliseconds
-                var givenTime = date.getTime();
-              
-                // Return true if the given date and time are in the past
+        if (is_banned) {
+            function formatDate(timestamp) { //"DD.MM.YYYY HH:MM"
+
+                const date = new Date(timestamp * 1000);
+                const dateString = date.toLocaleDateString();
+                const timeString = date.toLocaleTimeString();
+
+                return `${dateString} ${timeString}`;
+            }
+            function isDateInPast(seconds) {
+
+                var currentTime = new Date().getTime() / 1000;
+                var givenTime = seconds;
                 return givenTime < currentTime;
             }
             //check if ban has expired
-            if(!isDateInPast(user.rows[0].banneduntil)){
-                return res.render('login', { error: 'You are banned until '+ user.rows[0].banneduntil}); 
+            if (!isDateInPast(user.rows[0].banneduntil)) {
+                return res.render('login', { error: 'You are banned until ' + formatDate(user.rows[0].banneduntil) });
             }
 
 
@@ -210,7 +219,7 @@ app.post('/login', async (req, res) => {
             let expirationDate = new Date();
             expirationDate.setFullYear(expirationDate.getFullYear() + 1);
 
-            res.setHeader('Set-Cookie', ['session_token=' + cookie_token + ';' + 'expires='+expirationDate.toUTCString()+';']);
+            res.setHeader('Set-Cookie', ['session_token=' + cookie_token + ';' + 'expires=' + expirationDate.toUTCString() + ';']);
             res.sendStatus(200);
             return;
         }
