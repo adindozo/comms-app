@@ -7,7 +7,26 @@
     <title>Document</title>
 </head>
 <body>
+    <form action="/login" method="POST">
+        
+        <label for="email">Email Adddress</label>
+        <input type="email" name="email" id="email" placeholder="E-mail">
+        
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Password">
+
+        <label for="showpw">Show password</label>
+        <input type="checkbox">
+
+        <label for="remember">Remember me</label>
+        <input type="checkbox" name="remember" id="remember" value="true">
+
+        
+        <input type="submit" value="Login">
+        <div>dont have an account? <a href="/register">Register</a></div>
+        <%= locals.error %> 
+    </form>
+
     
-    <%= locals.error %> 
 </body>
 </html>

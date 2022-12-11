@@ -8,17 +8,17 @@
 // 
 // 
 require('dotenv').config(); //database credentials stored in .env
+const bcrypt = require('bcrypt');
+const generator = require('generate-password');
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 let path = require('path');
 const pg = require('pg');
 const express = require('express');
 const router = express.Router();
 const app = express();
 const port = 8080;
-const bcrypt = require('bcrypt');
-const generator = require('generate-password');
-const nodemailer = require('nodemailer');
 
-//functions for login and register checks
 
 
 
@@ -45,7 +45,7 @@ app.get('/register', (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-   
+
 
     try {
         //check if email and username are valid, checked on client side as well
@@ -55,22 +55,22 @@ app.post('/register', async (req, res) => {
             let exp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,31}$/;
             return (exp.test(txt));
         }
-        
+
         let CheckUsername = (txt) => {
             //  A valid username should start with an alphabet so, 
             //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
             //[A-Za-z0-9_] 
-        
+
             let exp = /^[A-Za-z][A-Za-z0-9_]{3,19}$/;
             return (exp.test(txt));
         }
-        
+
         let CheckEmail = (txt) => {
             let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return (exp.test(txt));
         }
-        
-        
+
+
         let pw = req.body.password;
         let username = req.body.username;
         let email = req.body.email;
@@ -93,7 +93,7 @@ app.post('/register', async (req, res) => {
         //if all good, insert into DB unverified user
 
         let hashpw = await bcrypt.hash(pw, 10);
-        
+
         //generate 16-char len email code
         const code = generator.generate({
             length: 16,
@@ -151,7 +151,7 @@ app.get('/verify/:code/:username', async (req, res) => {
         if (count == 0) return res.sendStatus(404);
         await pool.query(`update accounts set verified=true, emailcode=null where  
         username=$1`, [username])
-        res.render('verified',{username});
+        res.render('verified', { username });
     } catch (error) {
         console.log(error)
         res.sendStatus(500);
@@ -159,25 +159,71 @@ app.get('/verify/:code/:username', async (req, res) => {
 
 })
 
-app.post('/login',async (req,res)=>{
-   
+app.get('/login', (req, res) => {
+    res.render('login');
+})
+
+app.post('/login', async (req, res) => {
+
     try {
         let email = req.body.email;
         let pw = req.body.password;
         //find user with req email and compare it's password with provided one
-        let user = await pool.query('select hashpw, verified from accounts where email=$1',[email]);
-        if(user.rowCount==0) return res.render('login',{error: 'there is not an acc with that email'});
+        let user = await pool.query('select hashpw, verified, banneduntil from accounts where email=$1', [email]);
+        if (user.rowCount == 0) return res.render('login', { error: 'there is not an acc with that email' });
         let hashpw = user.rows[0].hashpw;
-        let verified=user.rows[0].verified;
+        let verified = user.rows[0].verified;
         console.log(hashpw)
-        let password_is_valid = await bcrypt.compare(pw,hashpw);
-        if(!password_is_valid) return res.render('login',{error: 'wrong password. Forgot password?'});
-        if(!verified) return res.render('login',{error: 'Please verify your email before logging in.'});
+        let password_is_valid = await bcrypt.compare(pw, hashpw);
+        if (!password_is_valid) return res.render('login', { error: 'wrong password. Forgot password?' });
+        if (!verified) return res.render('login', { error: 'Please verify your email before logging in.' });
+        //todo check if user is banned
+        let is_banned = Boolean(user.rows[0].banneduntil);
+        if(is_banned){
+            function isDateInPast(date) {
+                // Get the current date and time in milliseconds
+                var currentTime = new Date().getTime();
+              
+                // Get the given date and time in milliseconds
+                var givenTime = date.getTime();
+              
+                // Return true if the given date and time are in the past
+                return givenTime < currentTime;
+            }
+            //check if ban has expired
+            if(!isDateInPast(user.rows[0].banneduntil)){
+                return res.render('login', { error: 'You are banned until '+ user.rows[0].banneduntil}); 
+            }
+
+
+        }
         //from this line is code for successful login
+        const user_object = {
+            email: email
+        }
+        //cookie_token is a secret string for each user which, if they are logged in, has to be provided with each http request.
+        let cookie_token = jwt.sign(user_object, process.env.jwt_token_secret);
+
+        if (req.body.remember) { // if user wants server to remember credentials
+
+            // Set the cookie to expire in one year
+            let expirationDate = new Date();
+            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+            res.setHeader('Set-Cookie', ['session_token=' + cookie_token + ';' + 'expires='+expirationDate.toUTCString()+';']);
+            res.sendStatus(200);
+            return;
+        }
+
+        res.setHeader('Set-Cookie', ['session_token=' + cookie_token]);
         res.sendStatus(200);
     } catch (error) {
         console.log(error)
     }
+})
+
+app.get('logout', (req, res) => {
+    res.setHeader('Set-Cookie', ['session_token=' + cookie_token]);
 })
 
 app.listen(port, () => console.log(`app listening on port ${port}`));

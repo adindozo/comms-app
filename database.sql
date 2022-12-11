@@ -7,6 +7,8 @@ CREATE TABLE accounts (
     email varchar(320) UNIQUE NOT NULL,
     emailcode char(16) UNIQUE, --emailed code for user verification
     verified bool NOT NULL, --if email is verified
-    banneduntil timestamp, --if null user is not banned
+    banneduntil bigint, --if null user is not banned,
+    -- epoch timestamp is stored in BIGINT data type,
+    -- to avoid problems. (the year 2038 problem)
     pictureid int --profile picture filename, can be null
 );
