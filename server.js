@@ -3,9 +3,9 @@
 //          [acc types: admin, user, guest] 
 //          user can be banned
 
-//     2. Create register user system, store hashed passwords in database 
+//     2. Create register and login user system, store hashed passwords in database ✔️
 //            register route
-// 
+//     3. auth middleware     
 // 
 require('dotenv').config(); //database credentials stored in .env
 const bcrypt = require('bcrypt');
@@ -15,6 +15,8 @@ const jwt = require('jsonwebtoken');
 let path = require('path');
 const pg = require('pg');
 const express = require('express');
+let cookies = require("cookie-parser");
+const { formatDate, isDateInPast, CheckPassword, CheckEmail, CheckUsername } = require('./public/functions');
 const router = express.Router();
 const app = express();
 const port = 8080;
@@ -25,6 +27,7 @@ const port = 8080;
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
+app.use(cookies());
 
 let dbconfig = { //database credentials stored in object
     user: process.env.user,
@@ -49,26 +52,26 @@ app.post('/register', async (req, res) => {
 
     try {
         //check if email and username are valid, checked on client side as well
-        let CheckPassword = (txt) => {
-            // check a password between {7,19} = 8 - 20 characters which contain at least one 
-            // numeric digit, one uppercase and one lowercase letter
-            let exp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,31}$/;
-            return (exp.test(txt));
-        }
+        // let CheckPassword = (txt) => {
+        //     // check a password between {7,19} = 8 - 20 characters which contain at least one 
+        //     // numeric digit, one uppercase and one lowercase letter
+        //     let exp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,31}$/;
+        //     return (exp.test(txt));
+        // }
 
-        let CheckUsername = (txt) => {
-            //  A valid username should start with an alphabet so, 
-            //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
-            //[A-Za-z0-9_] 
+        // let CheckUsername = (txt) => {
+        //     //  A valid username should start with an alphabet so, 
+        //     //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
+        //     //[A-Za-z0-9_] 
 
-            let exp = /^[A-Za-z][A-Za-z0-9_]{3,19}$/;
-            return (exp.test(txt));
-        }
+        //     let exp = /^[A-Za-z][A-Za-z0-9_]{3,19}$/;
+        //     return (exp.test(txt));
+        // }
 
-        let CheckEmail = (txt) => {
-            let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return (exp.test(txt));
-        }
+        // let CheckEmail = (txt) => {
+        //     let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //     return (exp.test(txt));
+        // }
 
 
         let pw = req.body.password;
@@ -178,27 +181,27 @@ app.post('/login', async (req, res) => {
         if (user.rowCount == 0) return res.render('login', { error: 'there is not an acc with that email' });
         let hashpw = user.rows[0].hashpw;
         let verified = user.rows[0].verified;
-        console.log(hashpw)
+
         let password_is_valid = await bcrypt.compare(pw, hashpw);
         if (!password_is_valid) return res.render('login', { error: 'wrong password. Forgot password?' });
         if (!verified) return res.render('login', { error: 'Please verify your email before logging in.' });
         //todo check if user is banned
         let is_banned = Boolean(user.rows[0].banneduntil);
         if (is_banned) {
-            function formatDate(timestamp) { //"DD.MM.YYYY HH:MM"
+            // function formatDate(timestamp) { //"DD.MM.YYYY HH:MM"
 
-                const date = new Date(timestamp * 1000);
-                const dateString = date.toLocaleDateString();
-                const timeString = date.toLocaleTimeString();
+            //     const date = new Date(timestamp * 1000);
+            //     const dateString = date.toLocaleDateString();
+            //     const timeString = date.toLocaleTimeString();
 
-                return `${dateString} ${timeString}`;
-            }
-            function isDateInPast(seconds) {
+            //     return `${dateString} ${timeString}`;
+            // }
+            // function isDateInPast(seconds) {
 
-                var currentTime = new Date().getTime() / 1000;
-                var givenTime = seconds;
-                return givenTime < currentTime;
-            }
+            //     var currentTime = new Date().getTime() / 1000;
+            //     var givenTime = seconds;
+            //     return givenTime < currentTime;
+            // }
             //check if ban has expired
             if (!isDateInPast(user.rows[0].banneduntil)) {
                 return res.render('login', { error: 'You are banned until ' + formatDate(user.rows[0].banneduntil) });
@@ -208,7 +211,8 @@ app.post('/login', async (req, res) => {
         }
         //from this line is code for successful login
         const user_object = {
-            email: email
+            email: email,
+            banneduntil: user.rows[0].banneduntil
         }
         //cookie_token is a secret string for each user which, if they are logged in, has to be provided with each http request.
         let cookie_token = jwt.sign(user_object, process.env.jwt_token_secret);
@@ -219,20 +223,51 @@ app.post('/login', async (req, res) => {
             let expirationDate = new Date();
             expirationDate.setFullYear(expirationDate.getFullYear() + 1);
 
-            res.setHeader('Set-Cookie', ['session_token=' + cookie_token + ';' + 'expires=' + expirationDate.toUTCString() + ';']);
+            //res.setHeader('Set-Cookie', ['session_token=' + cookie_token + ';' + 'expires=' + expirationDate.toUTCString() + ';']);
+            res.cookie('session_token', cookie_token, {
+                maxAge: 31536000000, // expires in 1y
+                httpOnly: true
+            });
             res.sendStatus(200);
             return;
         }
+        res.cookie('session_token', cookie_token, {
+            httpOnly: true
+        });
 
-        res.setHeader('Set-Cookie', ['session_token=' + cookie_token]);
+        //res.setHeader('Set-Cookie', ['session_token=' + cookie_token]);
         res.sendStatus(200);
     } catch (error) {
         console.log(error)
     }
 })
 
-app.get('logout', (req, res) => {
-    res.setHeader('Set-Cookie', ['session_token=' + cookie_token]);
+app.get('/logout', (req, res) => {
+    res.clearCookie('session_token')
+
+    res.sendStatus(200)
 })
+
+
+
+
+
+let auth = function (req, res, next) {
+    let jwt_token = req.cookies.session_token
+    if (!jwt_token) return sendStatus(401); //if auth cookie is absent
+    jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
+        if (err) return res.sendStatus(403); //if auth cookie is invalid
+        if (!user.banneduntil) return next(); //if user is not banned, proceed
+
+        console.log(user)
+    });
+
+}
+//all requests after this line will use the auth middleware 
+app.use(auth);
+app.get('/authTEST', (req, res) => {
+    res.sendStatus(200);
+})
+
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
