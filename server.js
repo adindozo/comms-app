@@ -16,7 +16,7 @@ let path = require('path');
 const pg = require('pg');
 const express = require('express');
 let cookies = require("cookie-parser");
-const { formatDate, isDateInPast, CheckPassword, CheckEmail, CheckUsername } = require('./public/functions');
+const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername } = require('./public/functions');
 const router = express.Router();
 const app = express();
 const port = 8080;
@@ -51,35 +51,15 @@ app.post('/register', async (req, res) => {
 
 
     try {
-        //check if email and username are valid, checked on client side as well
-        // let CheckPassword = (txt) => {
-        //     // check a password between {7,19} = 8 - 20 characters which contain at least one 
-        //     // numeric digit, one uppercase and one lowercase letter
-        //     let exp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,31}$/;
-        //     return (exp.test(txt));
-        // }
 
-        // let CheckUsername = (txt) => {
-        //     //  A valid username should start with an alphabet so, 
-        //     //[A-Za-z]. All other characters can be alphabets, numbers or an underscore so,
-        //     //[A-Za-z0-9_] 
-
-        //     let exp = /^[A-Za-z][A-Za-z0-9_]{3,19}$/;
-        //     return (exp.test(txt));
-        // }
-
-        // let CheckEmail = (txt) => {
-        //     let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        //     return (exp.test(txt));
-        // }
 
 
         let pw = req.body.password;
         let username = req.body.username;
         let email = req.body.email;
-        if (!CheckPassword(pw)) throw 'client-err';
-        if (!CheckUsername(username)) throw 'client-err';
-        if (!CheckEmail(email)) throw 'client-err';
+        if (!checkPassword(pw)) throw 'client-err';
+        if (!checkUsername(username)) throw 'client-err';
+        if (!checkEmail(email)) throw 'client-err';
 
 
         //check if email and username are unique
@@ -188,20 +168,7 @@ app.post('/login', async (req, res) => {
         //todo check if user is banned
         let is_banned = Boolean(user.rows[0].banneduntil);
         if (is_banned) {
-            // function formatDate(timestamp) { //"DD.MM.YYYY HH:MM"
 
-            //     const date = new Date(timestamp * 1000);
-            //     const dateString = date.toLocaleDateString();
-            //     const timeString = date.toLocaleTimeString();
-
-            //     return `${dateString} ${timeString}`;
-            // }
-            // function isDateInPast(seconds) {
-
-            //     var currentTime = new Date().getTime() / 1000;
-            //     var givenTime = seconds;
-            //     return givenTime < currentTime;
-            // }
             //check if ban has expired
             if (!isDateInPast(user.rows[0].banneduntil)) {
                 return res.render('login', { error: 'You are banned until ' + formatDate(user.rows[0].banneduntil) });
@@ -251,20 +218,20 @@ app.get('/logout', (req, res) => {
 
 
 
-
-let auth = function (req, res, next) {
+let auth_middleware = function (req, res, next) {
     let jwt_token = req.cookies.session_token
-    if (!jwt_token) return sendStatus(401); //if auth cookie is absent
+    if (!jwt_token) return res.redirect('/login'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
-        if (err) return res.sendStatus(403); //if auth cookie is invalid
+        req.email=user.email; //attach user email to req object
+        if (err) return res.redirect('/login'); //if auth cookie is invalid
         if (!user.banneduntil) return next(); //if user is not banned, proceed
-
-        console.log(user)
+        if (isDateInPast(user.banneduntil)) return next(); //if ban expired
+        res.redirect('/login')
     });
-
 }
+
 //all requests after this line will use the auth middleware 
-app.use(auth);
+app.use(auth_middleware);
 app.get('/authTEST', (req, res) => {
     res.sendStatus(200);
 })
