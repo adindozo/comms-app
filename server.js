@@ -5,10 +5,10 @@
 
 //     2. Create register and login user system, store hashed passwords in database ✔️
 //            register route
-//     3. auth middleware     
+//     3. auth middleware     ✔️
+//     4. split router functionalities into external files     ✔️
 // 
 require('dotenv').config(); //database credentials stored in .env
-console.log(process.env.user)
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const nodemailer = require('nodemailer');
@@ -56,11 +56,8 @@ const logoutRouter = require('./routes/logout');
 app.use('/logout', logoutRouter);
 
 
-
-
-
-
-
+const resetpwRouter = require('./routes/resetpw');
+app.use('/resetpassword', resetpwRouter);
 
 
 let auth_middleware = function (req, res, next) {
@@ -70,7 +67,7 @@ let auth_middleware = function (req, res, next) {
         req.email=user.email; //attach user email to req object
         if (err) return res.redirect('/logout'); //if auth cookie is invalid
         if (!user.banneduntil) return next(); //if user is not banned, proceed
-        if (isDateInPast(user.banneduntil)) return next(); //if ban expired
+        if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed
         res.redirect('/logout')
     });
 }
@@ -79,6 +76,8 @@ let auth_middleware = function (req, res, next) {
 app.get('/authTEST', (req, res) => {
     res.sendStatus(200);
 })
+
+
 
 
 app.listen(port, () => console.log(`app listening on port ${port}`));

@@ -26,7 +26,7 @@ router.get('/:code/:username', async (req, res) => {
         $1 and username=$2`, [code, username])).rowCount;
         if (count == 0) return res.sendStatus(404);
         await pool.query(`update accounts set verified=true, emailcode=null where  
-        username=$1`, [username])
+        username=$1`, [username]);
         res.render('verified', { username });
     } catch (error) {
         console.log(error)
