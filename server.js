@@ -56,6 +56,9 @@ const logoutRouter = require('./routes/logout');
 app.use('/logout', logoutRouter);
 
 
+
+
+
 const resetpwRouter = require('./routes/resetpw');
 app.use('/resetpassword', resetpwRouter);
 
@@ -64,7 +67,8 @@ let auth_middleware = function (req, res, next) {
     let jwt_token = req.cookies.session_token
     if (!jwt_token) return res.redirect('/login'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
-        req.email=user.email; //attach user email to req object
+        req.user=user; //attach user info to req object
+        
         if (err) return res.redirect('/logout'); //if auth cookie is invalid
         if (!user.banneduntil) return next(); //if user is not banned, proceed
         if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed
@@ -73,11 +77,16 @@ let auth_middleware = function (req, res, next) {
 }
 
 //all requests after this line will use the auth middleware, user info is in req obj
+app.use(auth_middleware);
+
+
 app.get('/authTEST', (req, res) => {
     res.sendStatus(200);
+    console.log(req.user)
 })
 
-
+const mymeetingsRouter = require('./routes/mymeetings');
+app.use('/mymeetings', mymeetingsRouter);
 
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
