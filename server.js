@@ -17,6 +17,7 @@ let path = require('path');
 const pg = require('pg');
 const express = require('express');
 let cookies = require("cookie-parser");
+const bodyParser = require('body-parser');
 const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername } = require('./public/functions');
 const app = express();
 const port = 8080;
@@ -34,9 +35,11 @@ let dbconfig = { //database credentials stored in object
 
 
 app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '1mb' }));
+app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
 app.use(cookies());
-
+app.use(express.static('public'));
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 

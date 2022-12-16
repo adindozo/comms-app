@@ -17,10 +17,10 @@ let dbconfig = { //database credentials stored in object
 const pool = new pg.Pool(dbconfig); //creating db pool
 const router = express.Router();
 
-const multer = require('multer');
-const fs = require('fs').promises;
 
-const upload = multer({ dest: 'uploads/' });
+//router.use(express.urlencoded({ extended: true }));
+
+
 
 router.get('/', (req, res) => {
     res.render('mymeetings', { username: req.user.username });
@@ -35,7 +35,8 @@ router.get('/meeting_list_json', async (req, res) => {
 
 // Crud API for adding meeting
 
-router.post('/add_meeting' ,upload.single('file'), async (req, res) => {
+router.post('/add_meeting', async (req, res) => {
+    return res.json(JSON.parse(req.body.cover).data) //req.body.cover.data is Base64 string-picture
     try {
         if ((await pool.query('select code from meetings where code = $1',[req.body.code])).rowCount!=0) return res.status(409).json({error: 'Code already used'});
         await pool.query(`insert into meetings 
@@ -43,8 +44,7 @@ router.post('/add_meeting' ,upload.single('file'), async (req, res) => {
             ($1,$2,$3,$4,$5,$6)
             `, [req.body.name, req.body.code, req.user.accountid, req.body.unixstart, req.body.unixend, Boolean(req.body.coverphoto)]);
         if(!req.body.coverphoto) return res.sendStatus(200); //else store that photo in server with meetingID filename
-        let picture = await fs.readFile(req.body.pic);
-        await fs.writeFile('./../meeting_pictures/'+2+'.jpg',picture);
+        
         res.sendStatus(200);
         //add default pic
     } catch (error) {
