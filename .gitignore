@@ -41,6 +41,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# User pictures
+meeting_pictures/
+
+
 # TypeScript v1 declaration files
 typings/
 

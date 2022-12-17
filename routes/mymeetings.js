@@ -6,7 +6,8 @@ let path = require('path');
 const pg = require('pg');
 const express = require('express');
 let cookies = require("cookie-parser");
-const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername } = require('./../public/functions');
+const fs = require("fs");
+const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername, datetimeLocalToTimestamp } = require('./../public/functions');
 let dbconfig = { //database credentials stored in object
     user: process.env.user,
     database: process.env.database,
@@ -33,19 +34,35 @@ router.get('/meeting_list_json', async (req, res) => {
     res.json(meetings.rows);
 })
 
-// Crud API for adding meeting
+// crud API for meetings
 
+
+//create
 router.post('/add_meeting', async (req, res) => {
-    return res.json(JSON.parse(req.body.cover).data) //req.body.cover.data is Base64 string-picture
+    //return res.json(JSON.parse(req.body.cover).data) //req.body.cover.data is Base64 string-picture
+    let unixstart = datetimeLocalToTimestamp(req.body.unixstart)//change to unix timestamp in secs
+    let unixend = datetimeLocalToTimestamp(req.body.unixend)//change to unix timestamp in secs
     try {
-        if ((await pool.query('select code from meetings where code = $1',[req.body.code])).rowCount!=0) return res.status(409).json({error: 'Code already used'});
-        await pool.query(`insert into meetings 
+
+        const code = generator.generate({
+            length: 8,
+            numbers: true,
+            lowercase: false,
+            uppercase: false
+        });
+        let id = (await pool.query(`insert into meetings 
             (name,code,accountid,unixstart,unixend,coverphoto) values
-            ($1,$2,$3,$4,$5,$6)
-            `, [req.body.name, req.body.code, req.user.accountid, req.body.unixstart, req.body.unixend, Boolean(req.body.coverphoto)]);
-        if(!req.body.coverphoto) return res.sendStatus(200); //else store that photo in server with meetingID filename
+            ($1,$2,$3,$4,$5,$6) returning meetingid
+            `, [req.body.name, code, req.user.accountid, unixstart, unixend, Boolean(req.body.cover)])).rows[0].meetingid;
+
+        if (!req.body.cover) return res.sendStatus(201); //else store that photo in server with meetingID filename
         
-        res.sendStatus(200);
+        let coverimgBuffer = Buffer.from(JSON.parse(req.body.cover).data, 'base64');
+        fs.writeFile(__dirname + '/../meeting_pictures/' + id + '.jpeg', coverimgBuffer, (error) => {
+            if (error) return res.sendStatus(500);
+            res.sendStatus(201);
+        })
+
         //add default pic
     } catch (error) {
         console.log(error)
@@ -54,11 +71,7 @@ router.post('/add_meeting', async (req, res) => {
 
 })
 
-
-
-
-
-
+//todo finish cRUD api
 
 
 module.exports = router;

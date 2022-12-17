@@ -2,14 +2,15 @@ FilePond.registerPlugin(
     FilePondPluginImagePreview,
     FilePondPluginImageResize,
     FilePondPluginFileEncode,
-    FilePondPluginImageTransform
+    FilePondPluginImageTransform,
+    FilePondPluginImageCrop
 )
 
 
 FilePond.setOptions({
-    stylePanelAspectRatio: 100 / 300,
+
     imageResizeTargetWidth: 300,
-    imageResizeTargetHeight: 300, //ignored to maintain aspect ratio, not ignored with resize mode on
+    imageResizeTargetHeight: 300, //ignored smaller value to maintain aspect ratio, not ignored with resize mode on
     imageTransformOutputMimeType: 'image/jpeg',
     imageCropAspectRatio: '16:10'	
 

@@ -32,6 +32,12 @@ module.exports = {
     checkEmail: function (txt) {
         let exp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return (exp.test(txt));
+    },
+    datetimeLocalToTimestamp: function (datetime) {
+        // Create a new Date object from the datetime string
+        const date = new Date(datetime);
+        // Return the Unix timestamp in seconds
+        return parseInt(date.getTime() / 1000);
     }
     
     
