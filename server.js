@@ -59,7 +59,10 @@ const logoutRouter = require('./routes/logout');
 app.use('/logout', logoutRouter);
 
 
+app.get('/gethostname',(req,res) => {
 
+   res.send(req.headers.host);
+})
 
 
 const resetpwRouter = require('./routes/resetpw');

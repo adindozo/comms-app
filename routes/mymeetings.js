@@ -56,7 +56,7 @@ router.post('/add_meeting', async (req, res) => {
             `, [req.body.name, code, req.user.accountid, unixstart, unixend, Boolean(req.body.cover)])).rows[0].meetingid;
 
         if (!req.body.cover) return res.sendStatus(201); //else store that photo in server with meetingID filename
-        
+
         let coverimgBuffer = Buffer.from(JSON.parse(req.body.cover).data, 'base64');
         fs.writeFile(__dirname + '/../meeting_pictures/' + id + '.jpeg', coverimgBuffer, (error) => {
             if (error) return res.sendStatus(500);
@@ -70,6 +70,41 @@ router.post('/add_meeting', async (req, res) => {
     }
 
 })
+
+//read
+router.get('/json_list', async (req, res) => {
+    try {
+        res.json((await pool.query('select * from meetings')).rows);
+
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
+
+router.get('/json_list/:id', async (req, res) => {
+    try {
+        res.json((await pool.query('select * from meetings where meetingid=$1', [req.params.id])).rows);
+
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
+
+
+//delete
+router.delete('/delete_meeting/:id', async (req, res) => {
+    try {
+        await pool.query('delete from meetings where meetingid=$1',[req.params.id]);
+        res.sendStatus(200);
+
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
+
 
 //todo finish cRUD api
 

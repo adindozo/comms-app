@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
             from: process.env.email,
             to: email,
             subject: 'Comms account verification',
-            text: 'http://localhost:8080/verify/' + code + '/' + username
+            text: 'http://'+ req.headers.host +'/verify/' + code + '/' + username
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
