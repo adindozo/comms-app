@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="/home-client.js"></script>
     <title>Document</title>
 </head>
 <body>
     <header>
-        <a href="/register">Register</a>
-        <a href="/login">Log in</a>
+        <%- Boolean(locals.username) ? `<a href="/mymeetings">${locals.username}'s meetings</a> <a href="/logout">Log out</a>` :`<a href="/register">Register</a> <a href="/login">Log in</a>` %> 
     </header>
+    <main>
+        <p>Joining a meeting?</p>
+        <form action="/join_meeting" method="GET">
+            <input type="text" pattern="[0-9]{8}" name="code" id="code" placeholder="8-digit code" required><button type="submit" id="join">Join</button>
+        </form>
+        <p>Comms app allows you to interact with your audience in real time.</p>
+        <a href="/login">Create your own meeting</a>
+        <div id="info">
+            <h1>Customizable</h1>
+            <p>Create your custom meeting background</p>
+        </div>
+    </main>
 </body>
 </html>

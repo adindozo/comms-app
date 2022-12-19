@@ -42,6 +42,7 @@ router.post('/add_meeting', async (req, res) => {
     //return res.json(JSON.parse(req.body.cover).data) //req.body.cover.data is Base64 string-picture
     let unixstart = datetimeLocalToTimestamp(req.body.unixstart)//change to unix timestamp in secs
     let unixend = datetimeLocalToTimestamp(req.body.unixend)//change to unix timestamp in secs
+    if(unixstart>unixend) return res.sendStatus(406);
     try {
 
         const code = generator.generate({

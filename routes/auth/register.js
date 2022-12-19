@@ -6,7 +6,7 @@ let path = require('path');
 const pg = require('pg');
 const express = require('express');
 let cookies = require("cookie-parser");
-const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername } = require('./../public/functions');
+const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername } = require('../../public/functions');
 let dbconfig = { //database credentials stored in object
     user: process.env.user,
     database: process.env.database,
