@@ -9,10 +9,10 @@ FilePond.registerPlugin(
 
 FilePond.setOptions({
 
-    imageResizeTargetWidth: 300,
-    imageResizeTargetHeight: 300, //ignored smaller value to maintain aspect ratio, not ignored with resize mode on
+    imageResizeTargetWidth: 1280,
+    imageResizeTargetHeight: 720, //ignored smaller value to maintain aspect ratio, not ignored with resize mode on
     imageTransformOutputMimeType: 'image/jpeg',
-    imageCropAspectRatio: '16:10'	
+    imageCropAspectRatio: '16:9'	
 
 })
 

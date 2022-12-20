@@ -19,8 +19,12 @@ const express = require('express');
 let cookies = require("cookie-parser");
 const bodyParser = require('body-parser');
 const nocache = require('nocache');
-const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername } = require('./public/functions');
+const { formatDate, isDateInPast, checkPassword, checkEmail, checkUsername, currentTimeInUnixTimestamp } = require('./public/functions');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 const port = 8080;
 app.use(nocache()); //disabling cache fixes some logging in related bugs
 
@@ -41,6 +45,7 @@ app.use(bodyParser.json({ limit: '1mb' }));
 app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
 app.use(cookies());
 app.use(express.static('public'));
+
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 
@@ -80,6 +85,25 @@ app.get('/',(req,res) => { //if logged in user is accessing log in page, show hi
 const join_meetingRouter = require('./routes/join_meeting');
 app.use('/join_meeting', join_meetingRouter);
 
+const questionsRouter = require('./routes/questions');
+app.use('/questions', questionsRouter);
+
+
+//when user connects on web socket, push all questions from that meeting to user and populate DOM tree
+io.on('connection', (socket) => {
+    console.log('hjelo')
+    socket.on('questions-req',async (meetingid)=>{
+        let questions = (await pool.query('select * from questions where meetingid=$1',[meetingid])).rows;
+        socket.emit('questions-res',questions)
+    })
+    socket.on('add_question_fromClient',async (question_object)=>{
+        if(question_object.question.length==0 || question_object.question.length>120 || question_object.username>30)  return;
+        let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
+        ($1, $2,$3,$4,$5,$6) returning *`,[question_object.question,0,false,question_object.meetingid,(question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
+        io.emit('new_question',new_question);
+    })
+});
+
 
 let auth_middleware = function (req, res, next) {
     let jwt_token = req.cookies.session_token
@@ -107,4 +131,6 @@ const mymeetingsRouter = require('./routes/mymeetings');
 app.use('/mymeetings', mymeetingsRouter);
 
 
-app.listen(port, () => console.log(`app listening on port ${port}`));
+server.listen(8080, () => {
+    console.log('listening on port 8080');
+  });

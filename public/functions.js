@@ -38,7 +38,16 @@ module.exports = {
         const date = new Date(datetime);
         // Return the Unix timestamp in seconds
         return parseInt(date.getTime() / 1000);
+    },
+    currentTimeInUnixTimestamp: function () {
+        // Get the current time in milliseconds
+        var currentTime = Date.now();
+      
+        // Convert the current time to seconds
+        var currentTimeInSeconds = Math.floor(currentTime / 1000);
+      
+        // Display the current time in Unix timestamp (in seconds)
+        return currentTimeInSeconds;
     }
-    
     
 }

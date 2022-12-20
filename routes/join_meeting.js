@@ -27,7 +27,7 @@ router.get('/',async(req,res) => {
     if(isDateInPast(meeting.unixend)) return res.render('no-meeting',{code, error: 'Unfortunately, meeting '+ meeting.name + ', hosted by '+hostacc.username+', is no longer active.'});
     if(!isDateInPast(meeting.unixstart)) return res.render('no-meeting',{code, error: 'Meeting '+ meeting.name + ', hosted by '+hostacc.username+', will be available at '+formatDate(meeting.unixstart)+'.'});
     //after this line is code for available meeting
-    res.render('meeting-socket',{code});
+    res.render('meeting-socket',{meeting});
 
 })
 

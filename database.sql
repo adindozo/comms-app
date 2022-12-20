@@ -16,11 +16,20 @@ CREATE TABLE accounts (
 
 create table meetings (
     meetingID serial primary key not null,
-    name varchar(32) unique not null,
+    name varchar(32)  not null,
     code char(8) unique not null,
     accountID int references accounts,
-    unixstart bigint,
-    unixend bigint,
+    unixstart bigint not null CHECK
+        (unixstart < meetings.unixend), -- unix timestamp in seconds is stored in BIGINT data type
+    unixend bigint not null, -- unix timestamp in seconds is stored in BIGINT data type
     coverphoto bool default false -- if user uploaded, filename is meetingID
 
+);
+
+create table questions(
+    questionid serial primary key not null,
+    question text,
+    likesnumber int,
+    answered bool,
+    meetingID int references meetings
 );
