@@ -28,8 +28,10 @@ create table meetings (
 
 create table questions(
     questionid serial primary key not null,
-    question text,
-    likesnumber int,
-    answered bool,
+    question text not null ,
+    likesnumber int not null ,
+    answered bool not null ,
+    unixtime bigint, --unix timestamp creation time in seconds
+    username varchar(255),
     meetingID int references meetings
 );

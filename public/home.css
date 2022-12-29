@@ -1,0 +1,137 @@
+body{
+    margin: 0px;
+}
+
+header{
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    justify-content: space-around;
+    background-image: linear-gradient(to right, #073950 , #04293A);
+    /* background-color: #04293A; */
+    min-height: 100px;
+   
+}
+header a{
+    
+    width: 50%;
+    background-color: #165b7a;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 11px 32px;
+    border-radius: 4px;
+    margin-left: 40px;
+}
+
+header a:hover{
+    filter: saturate(150%);
+    box-shadow: 5px 0px 0px 0px #ECB365;
+    transition: box-shadow 0.15s ease-out, filter 0.15s ease-out, background-color 0.15s ease-out;
+
+    
+}
+
+header a:not(:hover){
+    transition: box-shadow 0.15s ease-in, filter 0.15s ease-in, background-color 0.15s ease-in;
+}
+
+#login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    
+   
+}
+
+
+
+#logo{
+    color: #ECB365;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+
+#user_button, #user_button:hover{
+    filter: none;
+    box-shadow: none;
+    width: auto;
+    background-color: transparent;
+    margin: 0px;
+    padding: 11px 40px;
+}
+#user_button:hover{
+    background-color: #064663;
+}
+
+main{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    color: white;
+    background-color: #064663;
+    /* min-height: 100vh; */
+}
+
+.main_title{
+    grid-column: 4 / 6;
+    text-align: center;
+}
+
+form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 3 / 7;
+    text-align: center;
+    
+}
+
+form > * {
+    padding: 10px 20px;
+    text-align: center;
+    border: none;
+    margin: 0px;
+    
+}
+
+form > input, form > input {
+    border-radius: 10px 0 0 10px;
+    min-width: 40%;
+    font-size: 24px;
+}
+form > input:focus{
+    border: none;
+    outline: none;
+    
+}
+
+form > button {
+    background-color: #ECB365;
+    border-radius: 0 10px 10px 0;
+    min-width: 20%;
+}
+
+#join{
+    background-image: url('arrow-right-to-bracket-solid.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px;
+    font-size: 24px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.desc{
+    grid-column: 2 / 8;
+    text-align: center;
+    font-size: 64px;
+    font-weight: 500;
+}
+
+.leftfeaturedesc{
+    
+}

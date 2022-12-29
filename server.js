@@ -94,7 +94,8 @@ io.on('connection', (socket) => {
     console.log('hjelo')
     socket.on('questions-req',async (meetingid)=>{
         let questions = (await pool.query('select * from questions where meetingid=$1',[meetingid])).rows;
-        socket.emit('questions-res',questions)
+        socket.emit('questions-res',questions);
+        //socket.emit sends only to connected user, io.emit sends to everyone
     })
     socket.on('add_question_fromClient',async (question_object)=>{
         if(question_object.question.length==0 || question_object.question.length>120 || question_object.username>30)  return;
