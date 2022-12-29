@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
@@ -13,23 +14,62 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="home.css">
 </head>
+
 <body>
     <header>
         <span id="logo">comms_</span>
-        <%- Boolean(locals.username) ? `<a id='user_button' href="/mymeetings">${locals.username}'s meetings</a> <div id="login"><a id="logout" href="/logout">Log out</a></div>` :`<div id="login"><a href="/register">Register</a> <a href="/login">Log in</a></div>` %> 
+        <%- Boolean(locals.username) ? `<a id='user_button' href="/mymeetings">${locals.username}'s meetings</a>
+            <div id="login"><a id="logout" href="/logout">Log out</a></div>` :`<div id="login"><a
+                    href="/register">Register</a> <a href="/login">Log in</a></div>` %>
     </header>
     <main>
         <h1 class="main_title">Joining a meeting?</h1>
         <form action="/join_meeting" method="GET">
-            <input type="text" pattern="[0-9]{8}" name="code" id="code" placeholder="8-digit code" required><button type="submit" id="join"></button>
+            <input type="text" pattern="[0-9]{8}" name="code" id="code" placeholder="8-digit code" required><button
+                type="submit" id="join"></button>
         </form>
         <p class="desc">Interact with your audience in real time</p>
-        <p class="subdesc"></p>
-        <a href="/login">Create your own meeting</a>
-        <div id="info">
-            <h1>Customizable</h1>
-            <p>Create your custom meeting background</p>
+        <p class="subdesc">Comms platform allows you to communicate with
+            your audience in a live and immediate way. This can be especially useful for events, webinars, or any other
+            situation where you want to engage with your audience and get their feedback or questions in real time.</p>
+       
+        <div class="leftfeature"> Customizable
+            Event meetings are customizable in a way that users can change the background image of event meetings.
+            This can be especially useful for event organizers who want to create a specific theme or atmosphere for
+            their event meetings. For example, presenters could choose a background image that reflects the topic or
+            theme of
+            the event.
         </div>
+
+        <div class="rightfeature"> Real time interactions
+            With live-interactions support, attendees can ask questions, share their thoughts and opinions, and engage
+            with the event
+            as it is happening.
+
+            This can be especially useful for events and webinars where the organizers want to create a more interactive
+            and engaging experience for their attendees. For example, event organizers could use a live Q&A platform to
+            allow attendees to ask questions and get immediate responses, or set up a chat room where attendees can
+            discuss the event and share their thoughts with each other.
+        </div>
+
+        <div class="leftfeature"> secure
+            Passwords are one-way hashed and stored in a database which helps to protect the privacy and security of the
+            Comms users.
+
+            Storing passwords in a database in this way helps to ensure that user passwords are secure and cannot be
+            accessed by unauthorized parties. It also helps to protect against password cracking attacks, in which an
+            attacker tries to guess or determine a user's password by trying different combinations of characters.
+        </div>
+
+        <div class="rightfeature"> Open source
+            Last but not least, the 'comms' code is open source, meaning it is freely available for anyone to view, modify, and distribute.
+        </div>
+
+        
     </main>
+    <footer>
+        <span>© 2022 Comms Platform, Inc. Developed by Adin Đozo</span>
+    </footer>
 </body>
+
 </html>

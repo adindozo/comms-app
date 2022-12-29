@@ -57,6 +57,7 @@ header a:not(:hover){
 }
 
 #user_button, #user_button:hover{
+    border-radius: ;
     filter: none;
     box-shadow: none;
     width: auto;
@@ -73,7 +74,7 @@ main{
     grid-template-columns: repeat(8, 1fr);
     color: white;
     background-color: #064663;
-    /* min-height: 100vh; */
+    min-height: calc(100vh - 200px);
 }
 
 .main_title{
@@ -132,6 +133,30 @@ form > button {
     font-weight: 500;
 }
 
-.leftfeaturedesc{
+.subdesc{
+    grid-column: 3 / 7;
+    text-align: center;
+    font-size: 21px;
+}
+
+.leftfeature{
+    grid-column: 2 / 4;
+}
+
+.rightfeature{
+    grid-column: 6 / 8;
+}
+
+footer{
+    color: rgba(255, 255, 255, 0.407);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     
+    width: 100%;
+    min-height: 100px;
+    background-color:  #04293A;
+}
+footer span{
+    margin-right: 20px;
 }
