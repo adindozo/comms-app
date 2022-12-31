@@ -1,2 +1,2 @@
 # comms-app
-Comms is a real-time audience interaction web app for meetings and events.
+Comms is a real-time audience interaction web platform for meetings and events.
