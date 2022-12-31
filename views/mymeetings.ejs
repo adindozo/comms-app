@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
+    <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>
+        <%= locals.username %>'s meetings
+    </title>
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
         rel="stylesheet" />
-
     <script defer src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
@@ -18,16 +20,19 @@
     <script defer src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
     <script defer src="/mymeetings-client.js"></script>
+    <link rel="stylesheet" href="mymeetings.css">
 </head>
 
 <body>
     <header>
-        <span>
-            <%= locals.username %> meetings
-        </span>
-        <button id="new-meeting-button">New meeting</button>
+        <a href="/" id="logo">comms_</a>
+        <span id='user_button'><%= locals.username %>'s meetings</span>
+        <div id="login"><a id="logout" href="/logout">Log out</a></div>
+     
+       
     </header>
     <main>
+        <button id="new-meeting-button">New meeting</button>
         <div id="new_meeting">
             <button id="x"></button>
             <form action="/mymeetings/add_meeting" method="post">
@@ -47,6 +52,9 @@
             </form>
         </div>
     </main>
+    <footer>
+        <span>© 2022 Comms Platform, Inc. Developed by Adin Đozo</span>
+    </footer>
 </body>
 
 </html>

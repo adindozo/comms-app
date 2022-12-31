@@ -1,20 +1,30 @@
+
+/* https://colorhunt.co/palette/041c3204293a064663ecb365 */
+
+:root {
+    --color-400: #041C32;
+    --color-300: #04293A;
+    --color-200: #064663;
+    --color-100: #ECB365;
+  }
 body{
     margin: 0px;
 }
+
 
 header{
     font-family: 'IBM Plex Sans', sans-serif;
     display: flex;
     justify-content: space-around;
-    background-image: linear-gradient(to right, #073950 , #04293A);
-    /* background-color: #04293A; */
+ 
+    background-color: var(--color-400);
     min-height: 100px;
    
 }
 header a{
     
     width: 50%;
-    background-color: #165b7a;
+    background-color: var(--color-200);
     text-decoration: none;
     color: white;
     display: flex;
@@ -26,8 +36,8 @@ header a{
 }
 
 header a:hover{
-    filter: saturate(150%);
-    box-shadow: 5px 0px 0px 0px #ECB365;
+    filter: saturate(200%);
+    box-shadow: 5px 0px 0px 0px var(--color-100);
     transition: box-shadow 0.15s ease-out, filter 0.15s ease-out, background-color 0.15s ease-out;
 
     
@@ -49,7 +59,7 @@ header a:not(:hover){
 
 
 #logo{
-    color: #ECB365;
+    color: var(--color-100);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,7 +67,7 @@ header a:not(:hover){
 }
 
 #user_button, #user_button:hover{
-    border-radius: ;
+    border-radius: 0px;
     filter: none;
     box-shadow: none;
     width: auto;
@@ -66,14 +76,14 @@ header a:not(:hover){
     padding: 11px 40px;
 }
 #user_button:hover{
-    background-color: #064663;
+    background-color: var(--color-200);
 }
 
 main{
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     color: white;
-    background-color: #064663;
+    background-color: var(--color-300);
     min-height: calc(100vh - 200px);
 }
 
@@ -111,7 +121,7 @@ form > input:focus{
 }
 
 form > button {
-    background-color: #ECB365;
+    background-color: var(--color-100);
     border-radius: 0 10px 10px 0;
     min-width: 20%;
 }
@@ -155,8 +165,27 @@ footer{
     
     width: 100%;
     min-height: 100px;
-    background-color:  #04293A;
+    background-color:  var(--color-400);
 }
 footer span{
     margin-right: 20px;
+}
+
+.create_meeting{
+    grid-column: 4 / 6;
+    text-align: center;
+    min-width: 50%;
+    margin: auto;
+    background-color: var(--color-100);
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+    padding: 5px 20px;
+}
+
+h2{
+    grid-column: 1 / -1;
+    text-align: center;
 }

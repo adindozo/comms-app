@@ -1,0 +1,56 @@
+:root {
+    --color-400: #041C32;
+    --color-300: #04293A;
+    --color-200: #064663;
+    --color-100: #ECB365;
+  }
+body{
+    margin: 0px;
+}
+
+
+header{
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    justify-content: space-around;
+   
+    background-color: var(--color-400);
+    min-height: 100px;
+   
+}
+
+footer{
+    color: rgba(255, 255, 255, 0.407);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
+    width: 100%;
+    min-height: 100px;
+    background-color:  var(--color-400);
+}
+
+main{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    color: white;
+    background-color: var(--color-300);
+    min-height: calc(100vh - 200px);
+}
+
+#login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    
+   
+}
+#logo{
+    color: var(--color-100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    text-decoration: none;
+}
