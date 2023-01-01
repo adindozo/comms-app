@@ -64,6 +64,7 @@ header a:not(:hover){
     justify-content: center;
     align-items: center;
     font-size: 32px;
+    cursor: default;
 }
 
 #user_button, #user_button:hover{
@@ -109,10 +110,12 @@ form > * {
     
 }
 
-form > input, form > input {
+form > input {
     border-radius: 10px 0 0 10px;
     min-width: 40%;
     font-size: 24px;
+    background-color: rgba(255, 255, 255, 0.8)
+    
 }
 form > input:focus{
     border: none;

@@ -18,17 +18,36 @@ FilePond.setOptions({
 
 FilePond.parse(document.body); //change input files to filepond inputs
 let new_meeting_window = document.getElementById('new_meeting');
+
 let x = document.getElementById('x');
 new_meeting_window.style.display = "none";
 document.getElementById('new-meeting-button').addEventListener('click', (e) => {
     
-    if (new_meeting_window.style.display === "none") {
-        new_meeting_window.style.display = "block";
-    } else {
-        new_meeting_window.style.display = "none";
-    }
-});
+    new_meeting_window.style.display='block';
+    
+    setTimeout(() => {
+        new_meeting_window.style.opacity=1;
+    }, 0);
+    
+  });
 
 x.addEventListener('click',() => {
-    new_meeting_window.style.display = "none";
+    document.querySelector('form').reset();
+    new_meeting_window.style.opacity=0;
+    setTimeout(() => {
+        new_meeting_window.style.display = "none";
+    }, 250);
+  
+    
 });
+
+document.getElementById('new_meeting').addEventListener('click',(e) => {
+    if(e.target == document.getElementById('new_meeting')) {
+        document.querySelector('form').reset();
+        new_meeting_window.style.opacity=0;
+        setTimeout(() => {
+            new_meeting_window.style.display = "none";
+        }, 250);
+      
+    }
+})

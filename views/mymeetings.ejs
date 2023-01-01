@@ -20,35 +20,37 @@
     <script defer src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
     <script defer src="/mymeetings-client.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="mymeetings.css">
 </head>
 
 <body>
     <header>
-        <a href="/" id="logo">comms_</a>
-        <span id='user_button'><%= locals.username %>'s meetings</span>
+        <span id="logo">comms_</span>
+        <a id="user_button" href="/mymeetings"><%= locals.username %>'s meetings</a>
         <div id="login"><a id="logout" href="/logout">Log out</a></div>
-     
-       
     </header>
     <main>
-        <button id="new-meeting-button">New meeting</button>
+        <button id="new-meeting-button">+ new meeting</button>
         <div id="new_meeting">
-            <button id="x"></button>
+            
             <form action="/mymeetings/add_meeting" method="post">
+                <div id="x"></div>
+                <label for="name">Meeting name</label>
                 <input type="text" name="name" id="name" placeholder="Meeting name">
 
                 <label for="unixstart">Starts at</label>
-                <input type="datetime-local" name="unixstart" id="unixstart" placeholder="Starts at">
+                <input type="datetime-local" name="unixstart" id="unixstart">
 
 
 
                 <label for="unixend">Lasts until</label>
-                <input type="datetime-local" name="unixend" id="unixend" placeholder="Lasts until">
+                <input type="datetime-local" name="unixend" id="unixend" >
 
+                <label for="cover">Meeting cover photo(aspect ratio 16:9, leave blank for default):</label>
                 <input type="file" name="cover" id="cover" class="filepond">
                 <span id="error"></span>
-                <input type="submit" value="Create meeting">
+                <input id="submit" type="submit" value="Create meeting">
             </form>
         </div>
     </main>
