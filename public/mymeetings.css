@@ -145,6 +145,7 @@ footer span{
 }
 
 .filepond--drop-label{
+    border-radius: 5px;
     background-color: var(--color-300);
     color: var(--color-100);
 }
@@ -216,3 +217,8 @@ label{
     border-radius: 5px;
     margin-bottom: 0px;
     }
+
+#error{
+    color: rgb(255, 87, 87);
+    font-size: 20px;
+}

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    
     <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,6 +23,7 @@
     <script defer src="/mymeetings-client.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="mymeetings.css">
+    
 </head>
 
 <body>
@@ -34,20 +36,20 @@
         <button id="new-meeting-button">+ new meeting</button>
         <div id="new_meeting">
             
-            <form action="/mymeetings/add_meeting" method="post">
+            <form action="/mymeetings/add_meeting" method="post" id="form">
                 <div id="x"></div>
                 <label for="name">Meeting name</label>
-                <input type="text" name="name" id="name" placeholder="Meeting name">
+                <input required maxlength="32" type="text" name="name" id="name" placeholder="Meeting name">
 
                 <label for="unixstart">Starts at</label>
-                <input type="datetime-local" name="unixstart" id="unixstart">
+                <input required type="datetime-local" name="unixstart" id="unixstart">
 
 
 
                 <label for="unixend">Lasts until</label>
-                <input type="datetime-local" name="unixend" id="unixend" >
+                <input required type="datetime-local" name="unixend" id="unixend" >
 
-                <label for="cover">Meeting cover photo(aspect ratio 16:9, leave blank for default):</label>
+                <label for="cover">Meeting cover photo (aspect ratio 16:9, leave blank for default):</label>
                 <input type="file" name="cover" id="cover" class="filepond">
                 <span id="error"></span>
                 <input id="submit" type="submit" value="Create meeting">

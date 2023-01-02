@@ -49,7 +49,9 @@ app.use(express.static('public'));
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 
-
+// app.use((req,res,next) => {
+//    console.log(req.url); next();
+// })
 
 
 app.get('/',(req,res) => { //if logged in user is accessing log in page, show his name and anchor for his meetings, else show log in and register buttons

@@ -43,6 +43,8 @@ router.post('/add_meeting', async (req, res) => {
     let unixstart = datetimeLocalToTimestamp(req.body.unixstart)//change to unix timestamp in secs
     let unixend = datetimeLocalToTimestamp(req.body.unixend)//change to unix timestamp in secs
     if(unixstart>unixend) return res.sendStatus(406);
+    if(isDateInPast(unixstart) || isDateInPast(unixend)) return res.sendStatus(406);
+    if ((req.body.name & unixend & unixstart)) return res.sendStatus(407);
     try {
 
         const code = generator.generate({
