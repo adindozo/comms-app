@@ -2,6 +2,7 @@
 
 
 
+
 FilePond.registerPlugin(
     FilePondPluginImagePreview,
     FilePondPluginImageResize,
@@ -112,41 +113,77 @@ let functions = {
     }
 
 }
-
-document.getElementById('submit').addEventListener('click', async (e) => {
+const form = document.getElementById('form');
+form.addEventListener('submit', async (e) => {
+   
     e.preventDefault();
-  
+    document.querySelector('#submit').style.display = 'none';
+    document.querySelector('.loader').style.display='block';
     let unixstart = functions.datetimeLocalToTimestamp(document.getElementById('unixstart').value);//change to unix timestamp in secs
     let unixend = functions.datetimeLocalToTimestamp(document.getElementById('unixend').value)//change to unix timestamp in secs
-    
-    if(!(unixstart || unixend || document.getElementById('name').value)){
-        document.getElementById('error').innerHTML = 'Please ensure that all input fields, except cover photo, are properly filled out.';
+
+    if (!(unixstart || unixend || document.getElementById('name').value)) {
+        return document.getElementById('error').innerHTML = 'Please ensure that all input fields, except cover photo, are properly filled out.';
     }
     if (unixstart > unixend) {
         return document.getElementById('error').innerHTML = 'Start time for all business activities must be scheduled to take place before the end time.';
-        
-        
+
+
     }
 
-    if(functions.isDateInPast(unixstart) || functions.isDateInPast(unixend)){
-    
+    if (functions.isDateInPast(unixstart) || functions.isDateInPast(unixend)) {
+
         return document.getElementById('error').innerHTML = 'Pursuant to company policy, all start and end times for business activities must be scheduled to take place in the future.';
-        
-        
+
+
     }
-   
-    e.preventDefault();
-    const formData = new FormData(document.getElementById('form'));
+
+
+
     try {
+        const formData = new FormData(form);
+        let JSONdata = {};
+        for (const [key, value] of formData) {
+            if (key == 'cover') {
+                if (typeof value == 'object') {//if value is object then user did not upload photo
+                    JSONdata[key] = null;
+                }
+
+                if (typeof value == 'string') { //if value is object then user has uploaded photo
+                    let coverJSON = JSON.parse(value);
+                    JSONdata[key] = coverJSON.data;
+                }
+
+            } else JSONdata[key] = value;
+
+        }
+
         const response = await fetch('/mymeetings/add_meeting', {
-          method: 'POST',
-          body: formData,
-          credentials: 'include' // this will include cookies in the request
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(JSONdata),
+            credentials: 'include' // this will include cookies in the request
         });
-        const data = await response.json();
-        console.log(data);
+        document.querySelector('.loader').style.display='none';
+        document.querySelector('#submit').style.display = 'block';
+        if (!response.ok) document.getElementById('error').innerHTML = 'Unfortunately, an unknown error occurred while processing your request.';
+        if (response.ok) {
+            document.querySelector('form').reset();
+            new_meeting_window.style.opacity = 0;
+            setTimeout(() => {
+                new_meeting_window.style.display = "none";
+            }, 250);
+            document.getElementById('error').innerHTML = '';
+        }
+
+
+
+
+
     } catch (error) {
-        console.error(error);
+        document.getElementById('error').innerHTML = 'Unfortunately, an unknown error occurred while processing your request.';
     }
 
 

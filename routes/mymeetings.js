@@ -39,12 +39,17 @@ router.get('/meeting_list_json', async (req, res) => {
 
 //create
 router.post('/add_meeting', async (req, res) => {
+    
+    
+
     //return res.json(JSON.parse(req.body.cover).data) //req.body.cover.data is Base64 string-picture
     let unixstart = datetimeLocalToTimestamp(req.body.unixstart)//change to unix timestamp in secs
     let unixend = datetimeLocalToTimestamp(req.body.unixend)//change to unix timestamp in secs
-    if(unixstart>unixend) return res.sendStatus(406);
-    if(isDateInPast(unixstart) || isDateInPast(unixend)) return res.sendStatus(406);
-    if ((req.body.name & unixend & unixstart)) return res.sendStatus(407);
+
+    if (unixstart > unixend) return res.sendStatus(406);
+    if (isDateInPast(unixstart) || isDateInPast(unixend)) return res.sendStatus(406);
+    if (!(req.body.name && unixend && unixstart)) return res.sendStatus(406);
+
     try {
 
         const code = generator.generate({
@@ -58,18 +63,29 @@ router.post('/add_meeting', async (req, res) => {
             ($1,$2,$3,$4,$5,$6) returning meetingid
             `, [req.body.name, code, req.user.accountid, unixstart, unixend, Boolean(req.body.cover)])).rows[0].meetingid;
 
-        if (!req.body.cover) return res.sendStatus(201); //else store that photo in server with meetingID filename
+        if (!req.body.cover) return res.sendStatus(201); //if photo is not uploaded, else store that photo in server with meetingID filename
+        
 
-        let coverimgBuffer = Buffer.from(JSON.parse(req.body.cover).data, 'base64');
-        fs.writeFile(__dirname + '/../meeting_pictures/' + id + '.jpeg', coverimgBuffer, (error) => {
-            if (error) return res.sendStatus(500);
+
+        const content = req.body.cover;
+
+        let coverimgBuffer = Buffer.from(req.body.cover, 'base64');
+
+     
+        fs.writeFile(__dirname + '/../public/meeting_pictures/' + id + '.jpeg', coverimgBuffer, (error) => {
+
+            if (error) {
+                console.log(error);
+                return res.sendStatus(501);
+            }
             res.sendStatus(201);
+
         })
 
-        //add default pic
+        
     } catch (error) {
         console.log(error)
-        res.sendStatus(500);
+        res.sendStatus(501);
     }
 
 })
@@ -99,7 +115,7 @@ router.get('/json_list/:id', async (req, res) => {
 //delete
 router.delete('/delete_meeting/:id', async (req, res) => {
     try {
-        await pool.query('delete from meetings where meetingid=$1',[req.params.id]);
+        await pool.query('delete from meetings where meetingid=$1', [req.params.id]);
         res.sendStatus(200);
 
     } catch (error) {
