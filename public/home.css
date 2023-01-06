@@ -13,6 +13,8 @@ body{
 
 
 header{
+    position: sticky;
+    top: 0px;
     font-family: 'IBM Plex Sans', sans-serif;
     display: flex;
     justify-content: space-around;

@@ -13,6 +13,7 @@
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
         rel="stylesheet" />
+    <script defer>let account_id = <%= locals.account_id %></script> 
     <script defer src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
@@ -56,6 +57,7 @@
                 <input id="submit" type="submit" value="Create meeting">
             </form>
         </div>
+        <span id="ul_loader"></span>
         <ul class="meeting_list">
             <!-- <li>
                 <div class="indicator_container">

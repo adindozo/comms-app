@@ -24,13 +24,15 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    res.render('mymeetings', { username: req.user.username });
+    res.render('mymeetings', { username: req.user.username, account_id: req.user.accountid });
 })
 
 //API for retrieving list of meetings in JSON
 
 router.get('/meeting_list_json', async (req, res) => {
     let meetings = await pool.query('select * from meetings where accountID=$1', [req.user.accountid]);
+    meetings.rows.sort((a,b)=>a.meetingid - b.meetingid);
+    console.log(meetings.rows)
     res.json(meetings.rows);
 })
 

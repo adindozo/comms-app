@@ -1,4 +1,12 @@
-
+let fetch_meetings = async function () {
+    document.querySelector('#ul_loader').style.display = 'block';
+    let res = await fetch('http://localhost:8080/mymeetings/meeting_list_json');
+    let json_data = await res.json();
+    document.querySelector('#ul_loader').style.display = 'none';
+    for (let meeting of json_data) {
+        create_meeting_card(meeting);
+    }
+}
 
 
 
@@ -61,6 +69,15 @@ document.getElementById('new_meeting').addEventListener('click', (e) => {
 })
 
 let functions = {
+    unixTimestampToDateString: (timestamp) => { //"DD.MM.YYYY"
+        var date = new Date(timestamp * 1000);
+
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // January is 0!
+        var year = date.getFullYear();
+
+        return day + '.' + month + '.' + year;
+    },
     formatDate: function (timestamp) { //"DD.MM.YYYY HH:MM"
 
         const date = new Date(timestamp * 1000);
@@ -115,10 +132,9 @@ let functions = {
 }
 const form = document.getElementById('form');
 form.addEventListener('submit', async (e) => {
-   
+
     e.preventDefault();
-    document.querySelector('#submit').style.display = 'none';
-    document.querySelector('.loader').style.display='block';
+
     let unixstart = functions.datetimeLocalToTimestamp(document.getElementById('unixstart').value);//change to unix timestamp in secs
     let unixend = functions.datetimeLocalToTimestamp(document.getElementById('unixend').value)//change to unix timestamp in secs
 
@@ -133,11 +149,12 @@ form.addEventListener('submit', async (e) => {
 
     if (functions.isDateInPast(unixstart) || functions.isDateInPast(unixend)) {
 
-        return document.getElementById('error').innerHTML = 'Pursuant to company policy, all start and end times for business activities must be scheduled to take place in the future.';
+        return document.getElementById('error').innerHTML = 'Start and end times for business activities must be scheduled to take place in the future.';
 
 
     }
-
+    document.querySelector('#submit').style.display = 'none';
+    document.querySelector('.loader').style.display = 'block';
 
 
     try {
@@ -166,9 +183,15 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(JSONdata),
             credentials: 'include' // this will include cookies in the request
         });
-        document.querySelector('.loader').style.display='none';
+        //code after this line is being executed after fetch create request
+        document.querySelector('.loader').style.display = 'none';
         document.querySelector('#submit').style.display = 'block';
-        if (!response.ok) document.getElementById('error').innerHTML = 'Unfortunately, an unknown error occurred while processing your request.';
+
+        if (!response.ok) return document.getElementById('error').innerHTML = 'Unfortunately, an unknown error occurred while processing your request.';
+        //code after this line is being executed after successful fetch create request
+        fetch_meetings();
+        document.querySelector('.meeting_list').innerHTML = '';
+
         if (response.ok) {
             document.querySelector('form').reset();
             new_meeting_window.style.opacity = 0;
@@ -180,10 +203,93 @@ form.addEventListener('submit', async (e) => {
 
 
 
-
-
     } catch (error) {
         document.getElementById('error').innerHTML = 'Unfortunately, an unknown error occurred while processing your request.';
+    }
+
+
+})
+
+function create_meeting_card(json_meeting) {
+    let meeting_name = document.createElement('span');
+    let meeting_date = document.createElement('span');
+    let indicator_container = document.createElement('div');
+    let indicator = document.createElement('div');
+    let three_dots_container = document.createElement('div');
+    let three_dots = document.createElement('div');
+    //todo .ellipsis_menu div
+    let menu = document.createElement('div');
+
+    let share_code_link = document.createElement('a');
+    share_code_link.innerText='Share invitation code';
+
+    let admin_panel_link = document.createElement('a');
+    admin_panel_link.innerText='Administration panel';
+
+    
+
+    let delete_meeting_link = document.createElement('a');
+    delete_meeting_link.innerText = 'Delete';
+
+    menu.appendChild(share_code_link);
+    menu.appendChild(admin_panel_link);
+    menu.appendChild(delete_meeting_link);
+    menu.className = 'ellipsis_menu';
+    // three_dots.dataset.meetingid=json_meeting.meetingid;
+    three_dots.id = json_meeting.meetingid;
+    if (functions.isDateInPast(json_meeting.unixend)) {
+        indicator.className = 'indicator-offline';
+    } else indicator.className = 'indicator-online';
+    indicator_container.className = 'indicator_container';
+    indicator_container.appendChild(indicator);
+    meeting_name.className = 'meeting_name';
+    meeting_name.innerText = json_meeting.name;
+    meeting_date.innerText = functions.unixTimestampToDateString(json_meeting.unixstart) + '. - ' + functions.unixTimestampToDateString(json_meeting.unixend) + '.';
+    meeting_date.className = 'meeting_date';
+    three_dots_container.className = 'three_dots_container';
+    three_dots.className = 'three_dots';
+    three_dots_container.appendChild(three_dots);
+    let li = document.createElement('li');
+    if (json_meeting.coverphoto) {
+        li.style.background = "linear-gradient(to right, var(--color-300),rgba(4, 41, 58,0.5)), url('meeting_pictures/" + json_meeting.meetingid + ".jpeg')";
+        li.style.backgroundSize = "cover";
+        li.style.backgroundPosition = "center";
+        li.style.backgroundRepeat = "no-repeat";
+    }
+
+    li.appendChild(indicator_container);
+    li.appendChild(meeting_name);
+    li.appendChild(meeting_date);
+    li.appendChild(three_dots_container);
+    li.appendChild(menu);
+    document.querySelector('.meeting_list').appendChild(li);
+}
+
+//  <!-- <li>
+//  <div class="indicator_container">
+//  <div class="indicator-offline"></div>
+// </div>
+// <span class="meeting_name">Dgesdge dsfg</span>
+// <span class="meeting_date">21.9.2023 - 29.12.2024</span>
+// <div class="three_dots_container">
+//  <div class="three_dots"></div>
+// </div>
+// </li> -->
+let meeting_list_dom_object = document.querySelector('.meeting_list');
+
+window.onload = fetch_meetings;
+
+document.querySelector('body').addEventListener('click', (e) => {
+    const ellipsisMenus = document.querySelectorAll('.ellipsis_menu');
+    ellipsisMenus.forEach((menu) => { //hide all currently shown menus
+        if (menu.style.display === 'flex') {
+            menu.style.display = 'none';
+        }
+    });
+    if (e.target.className == 'three_dots') { //show clicked one
+        let menu = e.target.parentNode.nextElementSibling;
+        console.log(menu.style.display)
+        menu.style.display = menu.style.display=='flex' ? 'none' : 'flex';
     }
 
 
