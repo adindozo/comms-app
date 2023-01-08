@@ -49,9 +49,9 @@ app.use(express.static('public'));
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 
-// app.use((req,res,next) => {
-//    console.log(req.url); next();
-// })
+app.use((req,res,next) => {
+   console.log(req.url); next();
+})
 
 
 app.get('/',(req,res) => { //if logged in user is accessing log in page, show his name and anchor for his meetings, else show log in and register buttons
@@ -83,6 +83,12 @@ app.get('/',(req,res) => { //if logged in user is accessing log in page, show hi
 
     const resetpwRouter = require('./routes/auth/resetpw');
     app.use('/resetpassword', resetpwRouter);
+
+    
+const share_codeRouter = require('./routes/share_code');
+app.use('/share_code', share_codeRouter);
+
+
 
 const join_meetingRouter = require('./routes/join_meeting');
 app.use('/join_meeting', join_meetingRouter);
@@ -133,6 +139,8 @@ app.get('/authTEST', (req, res) => {
 const mymeetingsRouter = require('./routes/mymeetings');
 app.use('/mymeetings', mymeetingsRouter);
 
+const send_mailRouter = require('./routes/send_mail');
+app.use('/send_mail', send_mailRouter)
 
 server.listen(8080, () => {
     console.log('listening on port 8080');

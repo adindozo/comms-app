@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/icon.svg" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= locals.name %> code</title>
+    <link rel="stylesheet" href="/share_code.css">
+</head>
+<body>
+    <header>
+        comms_
+    </header>
+    <main>
+        <div class="code">
+            
+            <span class="name">meeting "<%= locals.name %>"  code:</span>
+            <%= locals.code %> 
+        </div>
+        <form class="mail_share" action="/send_mail/<%= locals.code %> " method="get">
+            <span>Send code to Email:</span>
+            <input required type="email" placeholder="Email" name="email">
+           
+            <button id="send" type="submit">Send code</button>
+        </form>
+ 
+        
+    </main>
+    
+</body>
+</html>

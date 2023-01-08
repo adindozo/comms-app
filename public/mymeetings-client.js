@@ -221,6 +221,7 @@ function create_meeting_card(json_meeting) {
     let menu = document.createElement('div');
 
     let share_code_link = document.createElement('a');
+    share_code_link.href='/'+'share_code/'+json_meeting.code+'/'+json_meeting.name;
     share_code_link.innerText='Share invitation code';
 
     let admin_panel_link = document.createElement('a');

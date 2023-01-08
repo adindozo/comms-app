@@ -1,0 +1,90 @@
+:root {
+    --color-400: #041C32;
+    --color-300: #04293A;
+    --color-200: #064663;
+    --color-100: #ECB365;
+  }
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+header{
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: var(--color-300);
+    color: var(--color-100);
+    
+}
+
+main{
+    min-height: calc(100vh - 100px);
+    background-color: var(--color-300);
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    color: white;
+}
+
+.code{
+    font-size: 10em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* border-right: 1px solid var(--color-100); */
+}
+
+.mail_share{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 20%;
+}
+
+.mail_share input{
+    outline: none;
+    border: 0px;
+    border-bottom: 1px solid white;
+    margin: 10px 0px;
+    background-color: var(--color-300);
+    padding: 10px 0px;
+    color: white;
+}
+
+.mail_share input:focus{
+    border-bottom: 1px solid var(--color-100);
+    
+
+
+}
+
+.mail_share button{
+    padding: 5px 10px;
+}
+
+div.code {
+    position: relative;
+  }
+  
+  
+  
+div.code:after {
+    content: "";
+    background: var(--color-100);
+    position: absolute;
+    bottom: 25%;
+    right: 0;
+    height: 50%;
+    width: 1px;
+}
+
+
+.name{
+    font-size: 36px;
+}
