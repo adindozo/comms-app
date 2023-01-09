@@ -5,14 +5,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); </style>
     <title><%= locals.name %> code</title>
+
+    <link ref="stylesheet" type="text/css" href="/snackbar/snackbar.min.css" /> <script src="/snackbar/snackbar.min.js"></script>
     <link rel="stylesheet" href="/share_code.css">
+    <script>let code = <%= locals.code %></script>
+    <script src="/share_code-client.js"></script>
 </head>
 <body>
     <header>
         comms_
     </header>
     <main>
+        <div id="snackbar"></div>
         <div class="code">
             
             <span class="name">meeting "<%= locals.name %>"  code:</span>
@@ -23,6 +32,7 @@
             <input required type="email" placeholder="Email" name="email">
            
             <button id="send" type="submit">Send code</button>
+            <span class="loader"></span>
         </form>
  
         

@@ -1,13 +1,3 @@
-// TODO
-//     1.Create accounts databse ✔️
-//          [acc types: admin, user, guest] 
-//          user can be banned
-
-//     2. Create register and login user system, store hashed passwords in database ✔️
-//            register route
-//     3. auth middleware     ✔️
-//     4. split router functionalities into external files     ✔️
-// 
 require('dotenv').config(); //database credentials stored in .env
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
@@ -49,45 +39,36 @@ app.use(express.static('public'));
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 
-app.use((req,res,next) => {
-   console.log(req.url); next();
+app.use((req, res, next) => {
+    console.log(req.url); next();
 })
 
 
-app.get('/',(req,res) => { //if logged in user is accessing log in page, show his name and anchor for his meetings, else show log in and register buttons
+app.get('/', (req, res) => { //if logged in user is accessing log in page, show his name and anchor for his meetings, else show log in and register buttons
     let jwt_token = req.cookies.session_token
     if (!jwt_token) return res.render('home'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
 
         if (err) return res.render('home'); //if auth cookie is invalid
-        if (!user.banneduntil) return res.render('home',{username: user.username}); //if user is not banned, proceed
-        if (isDateInPast(user.banneduntil)) return res.render('home',{username: user.username}); //if ban expired, proceed
+        if (!user.banneduntil) return res.render('home', { username: user.username }); //if user is not banned, proceed
+        if (isDateInPast(user.banneduntil)) return res.render('home', { username: user.username }); //if ban expired, proceed
         res.render('home');
     });
 })
 
-//auth:
-    const registerRouter = require('./routes/auth/register');
-    app.use('/register', registerRouter);
 
-    const verifyRouter = require('./routes/auth/verify');
-    app.use('/verify', verifyRouter);
+const registerRouter = require('./routes/auth/register');
+app.use('/register', registerRouter);
 
-
-    const loginRouter = require('./routes/auth/login');
-    app.use('/login', loginRouter);
-
-    const logoutRouter = require('./routes/auth/logout');
-    app.use('/logout', logoutRouter);
+const verifyRouter = require('./routes/auth/verify');
+app.use('/verify', verifyRouter);
 
 
-    const resetpwRouter = require('./routes/auth/resetpw');
-    app.use('/resetpassword', resetpwRouter);
+const loginRouter = require('./routes/auth/login');
+app.use('/login', loginRouter);
 
-    
-const share_codeRouter = require('./routes/share_code');
-app.use('/share_code', share_codeRouter);
-
+const resetpwRouter = require('./routes/auth/resetpw');
+app.use('/resetpassword', resetpwRouter);
 
 
 const join_meetingRouter = require('./routes/join_meeting');
@@ -100,16 +81,16 @@ app.use('/questions', questionsRouter);
 //when user connects on web socket, push all questions from that meeting to user and populate DOM tree
 io.on('connection', (socket) => {
     console.log('hjelo')
-    socket.on('questions-req',async (meetingid)=>{
-        let questions = (await pool.query('select * from questions where meetingid=$1',[meetingid])).rows;
-        socket.emit('questions-res',questions);
+    socket.on('questions-req', async (meetingid) => {
+        let questions = (await pool.query('select * from questions where meetingid=$1', [meetingid])).rows;
+        socket.emit('questions-res', questions);
         //socket.emit sends only to connected user, io.emit sends to everyone
     })
-    socket.on('add_question_fromClient',async (question_object)=>{
-        if(question_object.question.length==0 || question_object.question.length>120 || question_object.username>30)  return;
+    socket.on('add_question_fromClient', async (question_object) => {
+        if (question_object.question.length == 0 || question_object.question.length > 120 || question_object.username > 30) return;
         let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
-        ($1, $2,$3,$4,$5,$6) returning *`,[question_object.question,0,false,question_object.meetingid,(question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
-        io.emit('new_question',new_question);
+        ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
+        io.emit('new_question', new_question);
     })
 });
 
@@ -118,8 +99,8 @@ let auth_middleware = function (req, res, next) {
     let jwt_token = req.cookies.session_token
     if (!jwt_token) return res.redirect('/login'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
-        req.user=user; //attach user info to req object
-        
+        req.user = user; //attach user info to req object
+
         if (err) return res.redirect('/logout'); //if auth cookie is invalid
         if (!user.banneduntil) return next(); //if user is not banned, proceed
         if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed
@@ -127,8 +108,8 @@ let auth_middleware = function (req, res, next) {
     });
 }
 
-//all requests after this line will use the auth middleware, user info is in req obj
-app.use(auth_middleware);
+//all requests after this line will use the auth middleware, user info(from database) is in req.user object.
+/*-----------------------------------*/app.use(auth_middleware);/*----------------------------------------*/
 
 
 app.get('/authTEST', (req, res) => {
@@ -142,6 +123,18 @@ app.use('/mymeetings', mymeetingsRouter);
 const send_mailRouter = require('./routes/send_mail');
 app.use('/send_mail', send_mailRouter)
 
+
+
+const logoutRouter = require('./routes/auth/logout');
+app.use('/logout', logoutRouter);
+
+
+
+const share_codeRouter = require('./routes/share_code');
+app.use('/share_code', share_codeRouter);
+
+
+
 server.listen(8080, () => {
     console.log('listening on port 8080');
-  });
+});
