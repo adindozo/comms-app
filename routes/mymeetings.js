@@ -32,7 +32,6 @@ router.get('/', (req, res) => {
 router.get('/meeting_list_json', async (req, res) => {
     let meetings = await pool.query('select * from meetings where accountID=$1', [req.user.accountid]);
     meetings.rows.sort((a,b)=>a.meetingid - b.meetingid);
-    console.log(meetings.rows)
     res.json(meetings.rows);
 })
 

@@ -86,11 +86,11 @@ io.on('connection', (socket) => {
         socket.emit('questions-res', questions);
         //socket.emit sends only to connected user, io.emit sends to everyone
     })
-    socket.on('add_question_fromClient', async (question_object) => {
+    socket.on('add_question_fromClient', async (question_object, room) => {
         if (question_object.question.length == 0 || question_object.question.length > 120 || question_object.username > 30) return;
         let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
         ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
-        io.emit('new_question', new_question);
+        io.to(room).emit('new_question', new_question);
     })
 });
 
@@ -120,9 +120,10 @@ app.get('/authTEST', (req, res) => {
 const mymeetingsRouter = require('./routes/mymeetings');
 app.use('/mymeetings', mymeetingsRouter);
 
+
+
 const send_mailRouter = require('./routes/send_mail');
 app.use('/send_mail', send_mailRouter)
-
 
 
 const logoutRouter = require('./routes/auth/logout');

@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Eo_circle_red_letter-c.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Live meeting "<%= locals.meeting.name %>"</title>
     <script defer src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>let code = <%= locals.meeting.code %>; let custom_cover_photo = <%= locals.meeting.coverphoto %>; let id = <%= locals.meeting.meetingid %></script>
     <script defer src="/meeting-socket-client.js"></script>
+    <link rel="stylesheet" href="/meeting-socket.css">
    
 </head>
 <body>
     <header>
-        <span><%= locals.meeting.name %> </span>
-        <span id="comms">Comms</span>
+        <span class="comms">comms_</span>
+        <span class="name"><%= locals.meeting.name %> meeting</span>
+        <span></span>
     </header>
     <main>
         <!-- when user connects on web socket, push all questions from that meeting to user and populate DOM tree -->
-        <form>
-            <p> <label for="name">Your name</label> <span id="name-chars-count">23</span></p>
-            <input type="text" id="name" name="name" placeholder="Leave blank for anonymous">
-            <p><label for="question-input">Question</label> <span id="question-chars-count">23</span></p>
-            <textarea style="resize: none;" id="question-input" name="question" rows="4" cols="50"></textarea>
+        <form class="question-creation-box">
+            <p> <label for="name">Name</label> <span id="name-chars-count">34</span></p>
+            <input type="text" maxlength="34" id="name" name="name" placeholder="Leave blank for anonymous">
+            <p><label for="question-input">Question</label> <span id="question-chars-count">120</span></p>
+            <textarea maxlength="120" placeholder="Type your question..." style="resize: none;" id="question-input" name="question" rows="4" cols="50"></textarea>
             <button id="send">Send</button>
         </form>
     </main>

@@ -1,0 +1,106 @@
+/* https://colorhunt.co/palette/041c3204293a064663ecb365 */
+
+:root {
+    --color-400: #041C32;
+    --color-300: #04293A;
+    --color-200: #064663;
+    --color-100: #ECB365;
+}
+*{
+    margin: 0px;
+    padding: 0px;
+    background-color: var(--color-300);
+}
+
+body{
+    margin: 0px;
+}
+
+
+header{
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+    background-color: var(--color-400);
+    min-height: 100px;
+    margin-bottom: 20px;
+   
+}
+
+.comms{
+    background-color: var(--color-400);
+    color: var(--color-100);
+    font-size: 32px;
+}
+
+.name{
+    background-color: var(--color-400);
+
+    color: snow;
+    font-size: 26px;
+}
+
+main{
+    
+    
+    min-height: calc(100vh - 100px);
+
+
+    background-color: var(--color-300);
+    color: snow;
+}
+.question-creation-box{
+    padding: 20px;
+    background-color: transparent;
+    width: 500px;
+    display: block;
+    margin: auto;
+    border-radius: 5px;
+    box-shadow: 0px 1px 5px 0px black;
+    margin-bottom: 10px;
+}
+#question-input{
+    display: inline-block;
+    width: 485px;
+}
+
+input,textarea{
+    margin-bottom: 15px;
+    padding: 10px;
+    color: snow;
+    border: 0px;
+    border-bottom: 2px solid #032433;
+    /* background-color: #032433; */
+   
+}
+input:focus,textarea:focus{
+    border: 0px;
+    background-color: #032433;
+    outline: 0px;
+}
+input{
+    width: 485px;
+}
+p{
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#send{
+    background-color: var(--color-100);
+    padding: 10px 16px;
+    margin-left: auto;
+    color: var(--color-400);
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+#send:hover{
+    filter: saturate(2);
+    cursor: pointer;
+}

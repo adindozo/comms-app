@@ -30,11 +30,11 @@ window.onload = function () {
         document.querySelector('.loader').style.display = 'block';
         e.preventDefault();
         let mail = document.querySelector('input').value;
-        let host = location.origin + '/send_mail/' + code;
+        let route = location.origin + '/send_mail/' + code;
         let params = {
             email: mail
         }
-        let get_request = convertToGetRequest(host, params);
+        let get_request = convertToGetRequest(route, params);
         let res = await fetch(get_request);
         document.getElementById('send').style.display = 'block';
         document.querySelector('.loader').style.display = 'none';

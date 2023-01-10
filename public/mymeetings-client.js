@@ -1,3 +1,5 @@
+
+
 let fetch_meetings = async function () {
     document.querySelector('#ul_loader').style.display = 'block';
     let res = await fetch('http://localhost:8080/mymeetings/meeting_list_json');
@@ -8,7 +10,12 @@ let fetch_meetings = async function () {
     }
 }
 
-
+function show_snackbar(msg) {
+    var x = document.getElementById("snackbar");
+    x.innerText = msg;
+    x.className = "show";
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+}
 
 
 FilePond.registerPlugin(
@@ -221,16 +228,35 @@ function create_meeting_card(json_meeting) {
     let menu = document.createElement('div');
 
     let share_code_link = document.createElement('a');
-    share_code_link.href='/'+'share_code/'+json_meeting.code+'/'+json_meeting.name;
-    share_code_link.innerText='Share invitation code';
+    share_code_link.href = '/' + 'share_code/' + json_meeting.code + '/' + json_meeting.name;
+    share_code_link.target = 'blank';
+    share_code_link.innerText = 'Share invitation code';
 
     let admin_panel_link = document.createElement('a');
-    admin_panel_link.innerText='Administration panel';
+    admin_panel_link.innerText = 'Administration panel';
 
-    
+
 
     let delete_meeting_link = document.createElement('a');
     delete_meeting_link.innerText = 'Delete';
+    delete_meeting_link.addEventListener('click', async (e) => {
+        try {
+            let id = e.target.parentNode.parentNode.dataset.meetingid;
+            let route = location.origin + '/mymeetings/delete_meeting/' + id;
+            let res = await fetch(route, {
+                method: "delete"
+            });
+            if (res.ok) {
+                document.getElementById(id + 'li').remove();
+            } else {
+                console.log(res)
+                show_snackbar('Unfortunately, an unknown error occurred.');
+            }
+        } catch (error) {
+            show_snackbar('Unfortunately, an unknown error occurred.');
+        }
+
+    })
 
     menu.appendChild(share_code_link);
     menu.appendChild(admin_panel_link);
@@ -238,7 +264,7 @@ function create_meeting_card(json_meeting) {
     menu.className = 'ellipsis_menu';
     // three_dots.dataset.meetingid=json_meeting.meetingid;
     three_dots.id = json_meeting.meetingid;
-    if (functions.isDateInPast(json_meeting.unixend)) {
+    if (functions.isDateInPast(json_meeting.unixend) || !functions.isDateInPast(json_meeting.unixstart)) {
         indicator.className = 'indicator-offline';
     } else indicator.className = 'indicator-online';
     indicator_container.className = 'indicator_container';
@@ -251,6 +277,8 @@ function create_meeting_card(json_meeting) {
     three_dots.className = 'three_dots';
     three_dots_container.appendChild(three_dots);
     let li = document.createElement('li');
+    li.dataset.meetingid = json_meeting.meetingid;
+    li.id = json_meeting.meetingid + 'li';
     if (json_meeting.coverphoto) {
         li.style.background = "linear-gradient(to right, var(--color-300),rgba(4, 41, 58,0.5)), url('meeting_pictures/" + json_meeting.meetingid + ".jpeg')";
         li.style.backgroundSize = "cover";
@@ -289,8 +317,7 @@ document.querySelector('body').addEventListener('click', (e) => {
     });
     if (e.target.className == 'three_dots') { //show clicked one
         let menu = e.target.parentNode.nextElementSibling;
-        console.log(menu.style.display)
-        menu.style.display = menu.style.display=='flex' ? 'none' : 'flex';
+        menu.style.display = menu.style.display == 'flex' ? 'none' : 'flex';
     }
 
 

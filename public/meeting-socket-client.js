@@ -35,7 +35,9 @@ function create_DOM_elements_from_questionArray(questions_array){
 }
 let socket = io();
 socket.on('connect',()=>{
+    //each meeting will have its socket room. Room will be meeting id.
     //send req for questions from meeting with id
+    let room = id;
     socket.emit('questions-req',id);
     socket.on('questions-res',(questions_array)=>{
         create_DOM_elements_from_questionArray(questions_array);
@@ -47,7 +49,7 @@ socket.on('connect',()=>{
         question_object.username=document.getElementById('name').value;
         question_object.meetingid=id;
         document.getElementById('question-input').value='';
-        socket.emit('add_question_fromClient',question_object);//todo add question to databse and push to other connected clients.
+        socket.emit('add_question_fromClient',question_object, room);//todo add question to databse and push to other connected clients.
     })
     socket.on('new_question',(new_question)=>{
         console.log(new_question)
@@ -55,3 +57,32 @@ socket.on('connect',()=>{
         create_DOM_elements_from_questionArray(question_array);
     })
 })
+
+var input = document.getElementById("name");
+var charCount = document.getElementById("name-chars-count");
+
+  input.addEventListener("input", updateCharCount);
+
+  function updateCharCount() {
+    var charsLeft = input.maxLength - input.value.length;
+    charCount.innerHTML = charsLeft;
+    if (charsLeft == 0) {
+       charCount.style.color = "red";
+    }else{
+       charCount.style.color = "white";
+    }
+  }
+let input2 = document.getElementById("question-input");
+let charCount2 = document.getElementById("question-chars-count");
+
+  input2.addEventListener("input", updateCharCount2);
+
+  function updateCharCount2() {
+    var charsLeft = input2.maxLength - input2.value.length;
+    charCount2.innerHTML = charsLeft;
+    if (charsLeft == 0) {
+       charCount2.style.color = "red";
+    }else{
+       charCount2.style.color = "white";
+    }
+  }
