@@ -80,7 +80,6 @@ app.use('/questions', questionsRouter);
 
 //when user connects on web socket, push all questions from that meeting to user and populate DOM tree
 io.on('connection', (socket) => {
-    console.log('hjelo')
     socket.on('questions-req', async (meetingid) => {
         let questions = (await pool.query('select * from questions where meetingid=$1', [meetingid])).rows;
         socket.emit('questions-res', questions);
@@ -91,6 +90,20 @@ io.on('connection', (socket) => {
         let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
         ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
         io.to(room).emit('new_question', new_question);
+    })
+
+   
+
+    socket.on('update_like_count', async (question_id, n)=>{
+        try {
+            let a = await pool.query('update questions set likesnumber = $1 where questionid = $2',[n,question_id]);
+            io.emit('update_like_count_fromServer',question_id,n);
+            console.log(question_id)
+        } catch (error) {
+            console.log(error)
+        }
+        
+       
     })
 });
 
