@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.2.1/luxon.min.js" integrity="sha512-pyR2hpC7bLig9Ub4eUIOC/BAO4anpdt7jhpF4dfrPv+qIg+KWztdVjFPCRCsRaWVfUylUCvrrxqMFNrJBdQIjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Eo_circle_red_letter-c.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,9 +25,18 @@
             <p> <label for="name">Name</label> <span id="name-chars-count">34</span></p>
             <input type="text" maxlength="34" id="name" name="name" placeholder="Leave blank for anonymous">
             <p><label for="question-input">Question</label> <span id="question-chars-count">120</span></p>
-            <textarea maxlength="120" placeholder="Type your question..." style="resize: none;" id="question-input" name="question" rows="4" cols="50"></textarea>
-            <button id="send">Send</button>
+            <textarea  maxlength="120" placeholder="Type your question..." style="resize: none;" id="question-input" name="question" rows="4" cols="50"></textarea>
+            <p class="button-container"><button id="send">Send</button></p>
         </form>
+        <div class="question_card">
+            <p class="name-and-likes-container"> 
+                <span class="name">Anonymous</span>
+                <button class="like">23</button>
+            </p>
+            <span class="age"></span>
+            <p class="question"></p>
+
+        </div>
     </main>
      
      
