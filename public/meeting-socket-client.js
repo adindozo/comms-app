@@ -9,35 +9,65 @@ function getAgeFromTimestamp(timestamp) {
     return luxon.DateTime.fromSeconds(timestamp).toRelative(obj)
 }
 
-function create_DOM_elements_from_questionArray(questions_array) {
-    // <div class="question" id="question-id-from-db">
-    //      <span class="username">User name</span>
-    //      <button class="like-button"></button>
 
-    //      <p class='question-text'>Question</p>
+function create_question_cards(questions_array) {
+//     <div class="question_card">
+//     <p class="name-and-likes-container"> 
+//         <span class="username">Anonymous</span>
+//         <button data-liked="0" class="like">23</button>
+//     </p>
+//     <span class="age">13 years ago</span>
+//     <p class="question">Yo man sup wyd u up?</p>
 
-    // </div>
+// </div>
     for (let question of questions_array) {
-        let question_div = document.createElement('div');
-        question_div.id = question.questionid;
-        question_div.classList.add('question');
+        console.log(question)
+        let question_card = document.createElement('div');
+        question_card.id = question.questionid;
+        question_card.classList.add('question_card');
+
+        let name_and_likes_container = document.createElement('p');
+        name_and_likes_container.className='name-and-likes-container';
 
         let name_span = document.createElement('span');
         name_span.className = 'username';
         name_span.innerText = question.username;
 
         let like_button = document.createElement('button');
-        like_button.className = 'like-button';
+        like_button.className = 'like';
+        like_button.dataset.liked=0;
         like_button.innerText = question.likesnumber;
+        
+        like_button.addEventListener('click',(e)=>{
+            if(e.target.dataset.liked==1){
+                e.target.dataset.liked = 0; 
+                e.target.style.backgroundImage="url('thumbs-up-regular.svg')";
+                e.target.classList.remove("animate__animated", "animate__bounceIn");
+            }
+            else{
+                e.target.style.backgroundImage="url('thumbs-up-solid.svg')";
+                e.target.dataset.liked = 1; 
+                e.target.classList.add("animate__animated", "animate__bounceIn");
+            }
+        
+        })
 
-        let question_paragraph = document.createElement('p');
-        question_paragraph.innerText = question.question;
-        question_paragraph.className = 'question-p';
+        name_and_likes_container.appendChild(name_span);
+        name_and_likes_container.appendChild(like_button);
 
-        question_div.appendChild(name_span);
-        question_div.appendChild(like_button);
-        question_div.appendChild(question_paragraph);
-        document.querySelector('main').appendChild(question_div);
+        let age = document.createElement('span');
+        age.className='age';
+        age.innerHTML=getAgeFromTimestamp(parseInt(question.unixtime));
+
+        let questionp = document.createElement('p');
+        questionp.innerText = question.question;
+        questionp.className = 'question';
+
+        question_card.appendChild(name_and_likes_container);
+        question_card.appendChild(age);
+        question_card.appendChild(questionp);
+
+        document.querySelector('main').appendChild(question_card);
 
     }
 }
@@ -48,7 +78,7 @@ socket.on('connect', () => {
     let room = id;
     socket.emit('questions-req', id);
     socket.on('questions-res', (questions_array) => {
-        create_DOM_elements_from_questionArray(questions_array);
+        create_question_cards(questions_array);
     })
     document.getElementById('send').addEventListener('click', (e) => {
         e.preventDefault();
@@ -62,7 +92,7 @@ socket.on('connect', () => {
     socket.on('new_question', (new_question) => {
         console.log(new_question)
         let question_array = [new_question];
-        create_DOM_elements_from_questionArray(question_array);
+        create_question_cards(question_array);
     })
 })
 
