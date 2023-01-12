@@ -9,8 +9,26 @@ function getAgeFromTimestamp(timestamp) {
     return luxon.DateTime.fromSeconds(timestamp).toRelative(obj)
 }
 
+function sort_question_cards(sorttype){
+    if(sorttype=='likes'){
+        var question_cards = document.getElementsByClassName("question_card");
+        var question_card_arr = Array.from(question_cards);
+        question_card_arr.sort(function(a, b) {
+            var a_likes = parseInt(a.getAttribute("data-likes"));
+            var b_likes = parseInt(b.getAttribute("data-likes"));
+            return b_likes - a_likes;
+        });
+        var question_container = document.getElementById("question_container");
+        question_card_arr.forEach(function(question_card) {
+            question_container.appendChild(question_card);
+        });
+    }
+    if(sorttype=='time'){
+        
+    }
+}
 
-function create_question_cards(question) {
+function create_question_card(question) {
     //     <div class="question_card">
     //     <p class="name-and-likes-container"> 
     //         <span class="username">Anonymous</span>
@@ -75,37 +93,49 @@ function create_question_cards(question) {
     question_card.appendChild(name_and_likes_container);
     question_card.appendChild(age);
     question_card.appendChild(questionp);
+    question_card.dataset.likes=question.likesnumber;
 
-    document.querySelector('main').appendChild(question_card);
+    document.querySelector('#question_container').appendChild(question_card);
 
 
 }
 let socket = io();
 socket.on('connect', () => {
+    // setInterval(() => {
+    //     socket.emit('only-to-socket','private');
+    //     io.emit('to-all-sockets','public');
+    // }, 1000);
+    // socket.on('only-to-socket',(m)=>{
+    //     console.log(m)
+    // })
+    // socket.on('to-all-sockets',(m)=>{
+    //     console.log(m)
+    // })
     //show questions on connect
     //each meeting will have its socket room. Room will be meeting id.
     //send req for questions from meeting with id
-    let room = id;
-    socket.emit('questions-req', id);
+    
+    socket.emit('questions-req', id); //on connection, user sends request for questions from meeting with provided id. That same id will be room.
     socket.on('questions-res', (questions_array) => {
-        for(let question of questions_array) create_question_cards(question);
+        for(let question of questions_array) create_question_card(question);
     })
     document.getElementById('send').addEventListener('click', (e) => {
+        document.querySelector('#question-chars-count').innerHTML=120;
         e.preventDefault();
         let question_object = {};
         question_object.question = document.getElementById('question-input').value;
         question_object.username = document.getElementById('name').value;
         question_object.meetingid = id;
         document.getElementById('question-input').value = '';
-        socket.emit('add_question_fromClient', question_object, room);//todo add question to databse and push to other connected clients.
+        socket.emit('add_question_fromClient', question_object, id);//todo add question to databse and push to other connected clients.
     })
     socket.on('new_question', (new_question) => {
-       
-        let question_array = [new_question];
-        create_question_cards(question_array);
+        console.log(new_question)     
+        create_question_card(new_question);
     })
     socket.on('update_like_count_fromServer',(question_id,n)=>{
-        let q = document.getElementById(question_id).firstChild.getElementsByTagName('button')[0].innerText=n;
+        document.getElementById(question_id).dataset.likes=n;
+        document.getElementById(question_id).firstChild.getElementsByTagName('button')[0].innerText=n;
     })
 })
 

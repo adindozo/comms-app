@@ -80,7 +80,17 @@ app.use('/questions', questionsRouter);
 
 //when user connects on web socket, push all questions from that meeting to user and populate DOM tree
 io.on('connection', (socket) => {
+    // setInterval(() => {
+    //     socket.emit('only-to-socket','private');
+    //     io.emit('to-all-sockets','public');
+    //     io.broadcast.emit('to-all-sockets-except-sender','public');
+    // }, 1000);
+    
+
+   
     socket.on('questions-req', async (meetingid) => {
+         //join socket to room first
+        socket.join(meetingid);
         let questions = (await pool.query('select * from questions where meetingid=$1', [meetingid])).rows;
         socket.emit('questions-res', questions);
         //socket.emit sends only to connected user, io.emit sends to everyone
@@ -89,7 +99,7 @@ io.on('connection', (socket) => {
         if (question_object.question.length == 0 || question_object.question.length > 120 || question_object.username > 30) return;
         let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
         ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
-        io.to(room).emit('new_question', new_question);
+        io.in(room).emit('new_question', new_question); //io.to and io.in is same
     })
 
    

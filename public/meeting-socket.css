@@ -156,3 +156,47 @@ p{
     word-break: break-all;
     
 }
+
+.sortc{
+    width: 540px;
+    margin: auto;
+    padding: 0px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border: 0px;
+}
+
+option{
+    cursor: pointer;
+
+    color: white;
+    border: 0px;
+}
+
+#sort{
+    cursor: pointer;
+    border: 0px;
+    color: white;
+}
+#sort:focus{
+    border: 0px;
+    outline: 0px;
+}
+
+.refresh{
+    color: white;
+    border: 0px;
+    background-image: url('refresh.svg');
+    cursor: pointer;
+    opacity: 0.5;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+    padding-right: 20px;
+}
+.refresh:hover{
+    opacity: 1;
+}
