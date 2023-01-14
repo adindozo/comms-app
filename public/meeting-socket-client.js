@@ -1,6 +1,10 @@
 console.log(code);
 console.log(custom_cover_photo);
 console.log(id);
+let sortby = 'time';//2 values for sortby: time and likes. Default 'time'. If value is time new questions are added by LIFO stack, otherwise FIFO queue
+document.getElementById('sort').addEventListener('change',(e)=>{
+    sortby=e.target.value; //time/likes
+})
 function getAgeFromTimestamp(timestamp) {
     let obj = {
         style: 'long'
@@ -19,16 +23,28 @@ function sort_question_cards(sorttype){
             return b_likes - a_likes;
         });
         var question_container = document.getElementById("question_container");
+        question_container.innerHTML='';
         question_card_arr.forEach(function(question_card) {
             question_container.appendChild(question_card);
         });
     }
     if(sorttype=='time'){
-        
+        var question_cards = document.getElementsByClassName("question_card");
+        var question_card_arr = Array.from(question_cards);
+        question_card_arr.sort(function(a, b) {
+            var a_id = parseInt(a.id);
+            var b_id = parseInt(b.id);
+            return b_id - a_id;
+        });
+        var question_container = document.getElementById("question_container");
+        question_container.innerHTML='';
+        question_card_arr.forEach(function(question_card) {
+            question_container.appendChild(question_card);
+        });
     }
 }
 
-function create_question_card(question) {
+function create_question_card(question) { // function dependent upon value sortby
     //     <div class="question_card">
     //     <p class="name-and-likes-container"> 
     //         <span class="username">Anonymous</span>
@@ -95,8 +111,9 @@ function create_question_card(question) {
     question_card.appendChild(questionp);
     question_card.dataset.likes=question.likesnumber;
 
-    document.querySelector('#question_container').appendChild(question_card);
-
+    let question_container = document.getElementById("question_container");
+    if(sortby=='likes') question_container.appendChild(question_card);
+    if(sortby=='time') question_container.insertBefore(question_card, question_container.firstChild);
 
 }
 let socket = io();
@@ -118,6 +135,7 @@ socket.on('connect', () => {
     socket.emit('questions-req', id); //on connection, user sends request for questions from meeting with provided id. That same id will be room.
     socket.on('questions-res', (questions_array) => {
         for(let question of questions_array) create_question_card(question);
+        sort_question_cards(document.getElementById('sort').value);
     })
     document.getElementById('send').addEventListener('click', (e) => {
         document.querySelector('#question-chars-count').innerHTML=120;
@@ -177,3 +195,6 @@ document.querySelector("input").addEventListener('keydown', (e) => {
     if (e.keyCode == 13) e.preventDefault();
 });
 
+document.querySelector('.refresh').addEventListener('click',(e)=>{
+    sort_question_cards(document.getElementById('sort').value);
+})
