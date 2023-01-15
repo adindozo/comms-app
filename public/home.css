@@ -166,14 +166,32 @@ footer{
     color: rgba(255, 255, 255, 0.407);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     
     width: 100%;
     min-height: 100px;
     background-color:  var(--color-400);
 }
 footer span{
-    margin-right: 20px;
+    margin: 0px 20px;
+    color: rgba(255, 255, 255, 0.407);
+    text-decoration: none;
+}
+
+footer a{
+    margin: 0px 20px;
+    color: snow;
+    opacity: 0.5;
+    background-image: url('gears.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+    padding-right: 30px;
+    text-decoration: none;
+}
+footer a:hover{
+    text-decoration: underline;
+    opacity: 1;
 }
 
 .create_meeting{

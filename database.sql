@@ -33,5 +33,7 @@ create table questions(
     answered bool not null ,
     unixtime bigint, --unix timestamp creation time in seconds
     username varchar(255),
-    meetingID int references meetings
+    meetingID int references meetings ON DELETE CASCADE
 );
+
+-- admin@comms.com Admin123

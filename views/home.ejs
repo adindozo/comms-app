@@ -70,6 +70,7 @@
         
     </main>
     <footer>
+        <%- locals.role=='admin' ? '<a href="/admin">Site administration</a>' : '<span></span>'%>
         <span>© 2022 Comms Platform, Inc. Developed by Adin Đozo</span>
     </footer>
 </body>

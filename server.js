@@ -48,11 +48,14 @@ app.get('/', (req, res) => { //if logged in user is accessing log in page, show 
     let jwt_token = req.cookies.session_token
     if (!jwt_token) return res.render('home'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
+        console.log(user)
 
         if (err) return res.render('home'); //if auth cookie is invalid
-        if (!user.banneduntil) return res.render('home', { username: user.username }); //if user is not banned, proceed
-        if (isDateInPast(user.banneduntil)) return res.render('home', { username: user.username }); //if ban expired, proceed
+        if (!user.banneduntil) return res.render('home', { username: user.username, role: user.role }); //if user is not banned, proceed
+        if (isDateInPast(user.banneduntil)) return res.render('home', { username: user.username, role: user.role }); //if ban expired, proceed
         res.render('home');
+        
+        
     });
 })
 
@@ -89,17 +92,27 @@ io.on('connection', (socket) => {
 
    
     socket.on('questions-req', async (meetingid) => {
-         //join socket to room first
-        socket.join(meetingid);
-        let questions = (await pool.query('select * from questions where meetingid=$1', [meetingid])).rows;
-        socket.emit('questions-res', questions);
-        //socket.emit sends only to connected user, io.emit sends to everyone
+        try {
+            //join socket to room first
+            socket.join(meetingid);
+            let questions = (await pool.query('select * from questions where meetingid=$1', [meetingid])).rows;
+            socket.emit('questions-res', questions);
+            //socket.emit sends only to connected user, io.emit sends to everyone
+        } catch (error) {
+            console.log(error);
+        }
+       
     })
     socket.on('add_question_fromClient', async (question_object, room) => {
         if (question_object.question.length == 0 || question_object.question.length > 120 || question_object.username > 30) return;
-        let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
-        ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
-        io.in(room).emit('new_question', new_question); //io.to and io.in is same
+        try {
+            let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
+            ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
+            io.in(room).emit('new_question', new_question); //io.to and io.in is same
+        } catch (error) {
+            console.log(error);
+        }
+        
     })
 
    

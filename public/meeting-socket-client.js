@@ -111,6 +111,16 @@ function create_question_card(question) { // function dependent upon value sortb
     question_card.appendChild(questionp);
     question_card.dataset.likes=question.likesnumber;
 
+    
+    //animate__animated animate__flipInX animation on qcard
+    question_card.classList.add('animate__animated');
+    question_card.classList.add('animate__flipInX');
+    
+    // question_card.classList.remove('animate__animated');
+    // question_card.classList.remove('animate__flipInX');
+  
+    
+
     let question_container = document.getElementById("question_container");
     if(sortby=='likes') question_container.appendChild(question_card);
     if(sortby=='time') question_container.insertBefore(question_card, question_container.firstChild);
@@ -148,7 +158,6 @@ socket.on('connect', () => {
         socket.emit('add_question_fromClient', question_object, id);//todo add question to databse and push to other connected clients.
     })
     socket.on('new_question', (new_question) => {
-        console.log(new_question)     
         create_question_card(new_question);
     })
     socket.on('update_like_count_fromServer',(question_id,n)=>{
