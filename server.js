@@ -156,6 +156,9 @@ app.get('/authTEST', (req, res) => {
 const mymeetingsRouter = require('./routes/mymeetings');
 app.use('/mymeetings', mymeetingsRouter);
 
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
+
 
 
 const send_mailRouter = require('./routes/send_mail');

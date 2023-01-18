@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
         let pw = req.body.password;
         //find user with req email and compare it's password with provided one
         let user = await pool.query('select * from accounts where email=$1', [email]);
-        if (user.rowCount == 0) return res.render('login', { error: 'there is not an acc with that email' });
+        if (user.rowCount == 0) return res.render('login', { error: 'There is no account associated with that email address.' });
         
         let hashpw = user.rows[0].hashpw;
         let verified = user.rows[0].verified;

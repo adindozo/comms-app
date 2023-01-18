@@ -1,0 +1,100 @@
+:root {
+    --color-400: #041C32;
+    --color-300: #04293A;
+    --color-200: #064663;
+    --color-100: #ECB365;
+  }
+  *{
+    margin: 0px;
+    padding: 0px;
+  }
+
+header{
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-400);
+    min-height: 100px;
+}
+header span{
+    margin: 0px 40px;
+    color: snow;
+    background-image: url('gears.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+    padding-right: 30px;
+    text-decoration: none;
+
+}
+header div{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-image: url('menu-icon.svg');
+    width: 25px;
+    height: 25px;
+    opacity: 50%;
+    margin-left: 25px;
+}
+header div:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+.menu{
+
+
+    position: fixed;
+    height: calc(100vh);
+    width: 250px;
+    left: -250px;
+    top: 0px;
+    background-color: var(--color-400);
+    transition: left 0.39s ease-in-out;
+}
+main{
+    min-height: calc(100vh - 100px);
+    background-color: var(--color-300);
+}
+ul{
+    display: flex;
+    flex-direction: column;
+}
+a{
+    text-decoration: none;
+    color: white;
+    
+}
+a{
+    padding: 20px 0px;
+    padding-left: 58px;
+    transition: background-color 0.2s ease-out;
+    background-repeat: no-repeat;
+    background-position: 15px;
+    background-size: 15px;
+}
+a:nth-child(1){
+    margin-top: 100px;
+    
+}
+a:hover{
+    background-color: var(--color-200);
+}
+
+a:nth-child(1){
+    background-image: url('profile-icon.svg');
+}
+a:nth-child(2){
+    background-image: url('meeting-icon.svg');
+}
+
+a:nth-child(3){
+    background-image: url('https://cdn-icons-png.flaticon.com/512/642/642787.png');
+}
+
+
+a:nth-child(1){
+    background-color: var(--color-200);
+}

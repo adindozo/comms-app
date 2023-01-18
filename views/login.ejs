@@ -1,33 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Log in</title>
+    <link rel="stylesheet" href="login.css">
+
 </head>
+
 <body>
-    <form action="/login" method="POST">
-        
-        <label for="email">Email Adddress</label>
-        <input type="email" name="email" id="email" placeholder="E-mail">
-        
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" placeholder="Password">
+    <header>
+        <span id="logo">comms_</span>
 
-        <label for="showpw">Show password</label>
-        <input type="checkbox">
-
-        <label for="remember">Remember me</label>
-        <input type="checkbox" name="remember" id="remember" value="true">
-
-        
-        <input type="submit" value="Login">
-        <div>dont have an account? <a href="/register">Register</a></div> 
-        <div>Forgot password? <a href="/resetpassword">Reset password</a></div> 
-        <%= locals.error %> 
-    </form>
-
+    </header>
     
+    <main>
+        
+        <form action="/login" method="POST">
+            <p class="signin">Sign in</p>
+            <input type="email" name="email" id="email" placeholder="E-mail">
+
+            <input type="password" name="password" id="password" placeholder="Password">
+
+            <p class="container">
+            <span>
+            <input type="checkbox" name="remember" id="remember" value="true">
+            <label for="remember">Remember me</label>
+            </span>   
+            <a href="/resetpassword">Forgot password?</a>
+
+            </p>
+            <input type="submit" value="Login">
+            <span class="error"><%= locals.error %></span>
+            <div class="new">New to Comms? <a href="/register">Create an account</a></div>
+            
+        </form>
+    </main>
+
+
 </body>
+
 </html>
