@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script defer src="/admin-client.js"></script>
     <link rel="stylesheet" href="/admin.css">
@@ -8,22 +9,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comms Users</title>
 </head>
+
 <body>
-   
+
     <header>
         <div id="menu-toggle"></div>
         <span>Site administration</span>
     </header>
     <nav class="menu">
         <ul>
-          <a href="#">Accounts</a>
-          <a href="#">Meetings</a>
-          <a href="#">Forbidden Words</a>
+            <a href="#">Accounts</a>
+            <a href="#">Meetings</a>
+            <a href="#">Forbidden Words</a>
         </ul>
     </nav>
     <main>
+        <h1>Users</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Verified</th>
+                    <th>Banned until</th>
+                    <th colspan="2">Ban options</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <% for(let user of users) {%>
+                    <tr>
+                        <td>
+                            <%= user.username %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <%= user.verified %>
+                        </td>
+                        <td class="banneduntil">
+                            <%= user.banneduntil ? user.banneduntil : '-' %>
+                        </td>
+                        <td><a href="<%= `/admin/users/ban/${user.username}/15` %>">15 day ban</a></td>
+                        <td><a href="<%= `/admin/users/ban/${user.username}/30` %>">30 day ban</a></td> 
+                    </tr>
+                    <% } %>
+
+            </tbody>
+        </table>
 
     </main>
 
 </body>
+
 </html>

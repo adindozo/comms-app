@@ -39,9 +39,10 @@ app.use(express.static('public'));
 
 const pool = new pg.Pool(dbconfig); //creating db pool
 
-app.use((req, res, next) => {
-    console.log(req.url); next();
-})
+//route logger
+// app.use((req, res, next) => {
+//     console.log(req.url); next();
+// })
 
 
 app.get('/', (req, res) => { //if logged in user is accessing log in page, show his name and anchor for his meetings, else show log in and register buttons
@@ -136,7 +137,7 @@ let auth_middleware = function (req, res, next) {
     if (!jwt_token) return res.redirect('/login'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
         req.user = user; //attach user info to req object
-
+        console.log(user.banneduntil)
         if (err) return res.redirect('/logout'); //if auth cookie is invalid
         if (!user.banneduntil) return next(); //if user is not banned, proceed
         if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed

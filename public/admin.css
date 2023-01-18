@@ -67,7 +67,7 @@ a{
     color: white;
     
 }
-a{
+nav a{
     padding: 20px 0px;
     padding-left: 58px;
     transition: background-color 0.2s ease-out;
@@ -75,26 +75,72 @@ a{
     background-position: 15px;
     background-size: 15px;
 }
-a:nth-child(1){
+nav a:nth-child(1){
     margin-top: 100px;
     
 }
-a:hover{
+nav a:hover{
     background-color: var(--color-200);
 }
 
-a:nth-child(1){
+nav a:nth-child(1){
     background-image: url('profile-icon.svg');
 }
-a:nth-child(2){
+nav a:nth-child(2){
     background-image: url('meeting-icon.svg');
 }
 
-a:nth-child(3){
+nav a:nth-child(3){
     background-image: url('https://cdn-icons-png.flaticon.com/512/642/642787.png');
 }
 
 
-a:nth-child(1){
+nav a:nth-child(1){
     background-color: var(--color-200);
+}
+table{
+    color: white;
+    margin: auto;
+}
+table,td,th{
+    /* border: 1px solid white; */
+    padding: 18px;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.banneduntil{
+    text-align: center;
+}
+h1{
+    text-align: center;
+    color: white;
+    margin: 20px;
+    margin-top: 0px;
+}
+tr:nth-child(even){
+    background-color: var(--color-200);
+}
+thead{
+    border-bottom: 2px solid white;
+}
+a{
+    background-color: rgb(136, 30, 30);
+    opacity: 0.8;
+    border: 1px dashed yellow;
+    padding: 10px;
+    transition: background-color 1s ease-in;
+    -webkit-transition: background-color 1000ms linear;
+    -ms-transition: background-color 1000ms linear;
+    transition: background-color 1000ms linear;
+    color: white;
+}
+table a:hover{
+  
+    opacity: 1;
+    cursor: pointer;
+}
+
+tr:hover{
+    filter: saturate(1.4);
 }
