@@ -64,7 +64,6 @@ router.post('/', async (req, res) => {
         delete user_object.resetpwcode;
         //cookie_token is a secret string for each user which, if they are logged in, has to be provided with each http request.
         let cookie_token = jwt.sign(user_object, process.env.jwt_token_secret);
-        console.log(user_object)
         if (req.body.remember) { // if user wants server to remember credentials
 
             // Set the cookie to expire in one year

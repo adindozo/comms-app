@@ -49,7 +49,6 @@ app.get('/', (req, res) => { //if logged in user is accessing log in page, show 
     let jwt_token = req.cookies.session_token
     if (!jwt_token) return res.render('home'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
-        console.log(user)
 
         if (err) return res.render('home'); //if auth cookie is invalid
         if (!user.banneduntil) return res.render('home', { username: user.username, role: user.role }); //if user is not banned, proceed
@@ -139,10 +138,9 @@ let auth_middleware =  function (req, res, next) {
     if (!jwt_token) return res.redirect('/login'); //if auth cookie is absent
     jwt.verify(jwt_token, process.env.jwt_token_secret, async(err, user) => {
         try {
-            let banneduntil_fresh = (await pool.query('select banneduntil from accounts where accountid=$1',[user.accountid])).rows[0];
+            let banneduntil_fresh = (await pool.query('select banneduntil from accounts where accountid=$1',[user.accountid])).rows[0].banneduntil;
             user.banneduntil=banneduntil_fresh;
             req.user = user; //attach user info to req object
-            console.log(user.banneduntil)
             if (err) return res.redirect('/logout'); //if auth cookie is invalid
             if (!user.banneduntil) return next(); //if user is not banned, proceed
             if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed

@@ -18,10 +18,10 @@ const pool = new pg.Pool(dbconfig); //creating db pool
 const router = express.Router();
 
 
-router.get('/users',async(req,res) => {
+router.get('/users',async(req,res) => { //show user table with ban options
     try {
         let users = (await pool.query('select username, email, verified, banneduntil from accounts')).rows;
-        res.render('admin_users', {users});
+        res.render('admin_users', {users, formatDate, isDateInPast});
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -29,7 +29,7 @@ router.get('/users',async(req,res) => {
     
 })
 
-router.get('/users/ban/:username/:days',async(req,res) => {
+router.get('/users/ban/:username/:days',async(req,res) => { //ban options
     try {
         let today = new Date();
         let future_date = new Date(today.getTime() + (req.params.days * 24 * 60 * 60 * 1000));
@@ -47,8 +47,29 @@ router.get('/users/ban/:username/:days',async(req,res) => {
     
 })
 
-router.get('/meetings',(req,res) => {
-    res.render('admin_meetings');
+router.get('/meetings',async (req,res) => { //show meeting table
+    try {
+        let meetings = (await pool.query('select * from meetings')).rows;
+        let hosts = (await pool.query('select accountid,username from accounts')).rows;
+        meetings.forEach(meeting => {
+            meeting.host_name = (hosts.find(account => account.accountid==meeting.accountid)).username;
+        })
+        res.render('admin_meetings',{meetings, formatDate});
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+   
+ })
+
+ router.get('/meetings/delete/:id',async (req,res) => {
+    try {
+        await pool.query('delete from meetings where id=$1',[req.params.id]);
+        res.redirect('/admin/meetings');
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
  })
  
  

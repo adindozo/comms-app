@@ -1,25 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="/admin.css">
 
+<head>
+    <script defer src="/admin-client.js"></script>
+    <link rel="stylesheet" href="/admin.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comms Meetings</title>
+    <title>Comms Users</title>
 </head>
+
 <body>
-    <nav id="menu">
-        <ul>
-          <li><a href="#">Item 1</a></li>
-          <li><a href="#">Item 2</a></li>
-          <li><a href="#">Item 3</a></li>
-        </ul>
-    </nav>
+
     <header>
-        <button id="menu-toggle"></button>
+        <div id="menu-toggle"></div>
         <span>Site administration</span>
     </header>
-    
+    <nav class="menu">
+        <ul>
+            <a href="/admin/users">Accounts</a>
+            <a href="/admin/meetings" class="selected_menu">Meetings</a>
+            <a href="/admin/forbidden_words">Forbidden Words</a>
+        </ul>
+    </nav>
+    <main>
+        <h1>Scheduled meetings</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Host username</th>
+                    <th>Starts at <br> MM:DD:YYYY</th>
+                    <th>Ends at <br> MM:DD:YYYY</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <% for(let meeting of meetings) {%>
+                    <tr>
+                        <td>
+                            <%= meeting.name %> 
+                        </td> 
+                        <td>
+                            <%= meeting.code %> 
+                        </td>
+                        <td>
+                            <%= meeting.host_name %> 
+                        </td>
+                        <td>
+                            <%= locals.formatDate(meeting.unixstart) %>     
+                        </td>
+                        <td>
+                            <%= locals.formatDate(meeting.unixend) %> 
+                        </td>
+                        <td>
+                            <a href="/admin/meetings/delete/<%= meeting.meetingid %>" class="delete_meeting">s</a>
+                        </td>
+                    </tr>
+                    <% } %>
+
+            </tbody>
+        </table>
+
+    </main>
+
 </body>
+
 </html>

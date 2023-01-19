@@ -18,9 +18,11 @@
     </header>
     <nav class="menu">
         <ul>
-            <a href="#">Accounts</a>
-            <a href="#">Meetings</a>
-            <a href="#">Forbidden Words</a>
+            <ul>
+                <a href="/admin/users" class="selected_menu">Accounts</a>
+                <a href="/admin/meetings">Meetings</a>
+                <a href="/admin/forbidden_words">Forbidden Words</a>
+            </ul>
         </ul>
     </nav>
     <main>
@@ -31,7 +33,7 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Verified</th>
-                    <th>Banned until</th>
+                    <th>Banned until <br> MM:DD:YYYY</th>
                     <th colspan="2">Ban options</th>
                 </tr>
             </thead>
@@ -50,10 +52,10 @@
                             <%= user.verified %>
                         </td>
                         <td class="banneduntil">
-                            <%= user.banneduntil ? user.banneduntil : '-' %>
+                            <%= !locals.isDateInPast(user.banneduntil) ? locals.formatDate(user.banneduntil) : '-' %>
                         </td>
-                        <td><a href="<%= `/admin/users/ban/${user.username}/15` %>">15 day ban</a></td>
-                        <td><a href="<%= `/admin/users/ban/${user.username}/30` %>">30 day ban</a></td> 
+                        <td><a class="ban" href="<%= `/admin/users/ban/${user.username}/15` %>">15 day ban</a></td>
+                        <td><a class="ban" href="<%= `/admin/users/ban/${user.username}/30` %>">30 day ban</a></td> 
                     </tr>
                     <% } %>
 
