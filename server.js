@@ -67,6 +67,8 @@ app.use('/register', registerRouter);
 const verifyRouter = require('./routes/auth/verify');
 app.use('/verify', verifyRouter);
 
+const logoutRouter = require('./routes/auth/logout');
+app.use('/logout', logoutRouter);
 
 const loginRouter = require('./routes/auth/login');
 app.use('/login', loginRouter);
@@ -132,19 +134,26 @@ io.on('connection', (socket) => {
 });
 
 
-let auth_middleware = function (req, res, next) {
+let auth_middleware =  function (req, res, next) {
     let jwt_token = req.cookies.session_token
     if (!jwt_token) return res.redirect('/login'); //if auth cookie is absent
-    jwt.verify(jwt_token, process.env.jwt_token_secret, (err, user) => {
-        req.user = user; //attach user info to req object
-        console.log(user.banneduntil)
-        if (err) return res.redirect('/logout'); //if auth cookie is invalid
-        if (!user.banneduntil) return next(); //if user is not banned, proceed
-        if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed
-        res.redirect('/logout')
+    jwt.verify(jwt_token, process.env.jwt_token_secret, async(err, user) => {
+        try {
+            let banneduntil_fresh = (await pool.query('select banneduntil from accounts where accountid=$1',[user.accountid])).rows[0];
+            user.banneduntil=banneduntil_fresh;
+            req.user = user; //attach user info to req object
+            console.log(user.banneduntil)
+            if (err) return res.redirect('/logout'); //if auth cookie is invalid
+            if (!user.banneduntil) return next(); //if user is not banned, proceed
+            if (isDateInPast(user.banneduntil)) return next(); //if ban expired, proceed
+            res.redirect('/logout')
+        } catch (error) {
+            return res.sendStatus(500);
+            console.log(error)
+        }
+        
     });
 }
-
 //all requests after this line will use the auth middleware, user info(from database) is in req.user object.
 /*-----------------------------------*/app.use(auth_middleware);/*----------------------------------------*/
 
@@ -166,8 +175,7 @@ const send_mailRouter = require('./routes/send_mail');
 app.use('/send_mail', send_mailRouter)
 
 
-const logoutRouter = require('./routes/auth/logout');
-app.use('/logout', logoutRouter);
+
 
 
 

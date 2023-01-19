@@ -16,31 +16,38 @@
         <span id="logo">comms_</span>
 
     </header>
-    
+
     <main>
-        
+
         <form action="/login" method="POST">
             <p class="signin">Sign in</p>
-            <input type="email" name="email" id="email" placeholder="E-mail">
+            <input type="email" name="email" id="email" placeholder="E-mail" value="<%= locals.email %>">
 
-            <input type="password" name="password" id="password" placeholder="Password">
+            <input type="password" name="password" id="password" placeholder="Password" value="<%= locals.pw %>">
 
             <p class="container">
-            <span>
-            <input type="checkbox" name="remember" id="remember" value="true">
-            <label for="remember">Remember me</label>
-            </span>   
-            <a href="/resetpassword">Forgot password?</a>
+                <span>
+                    <input type="checkbox" name="remember" id="remember" value="true">
+                    <label for="remember">Remember me</label>
+                </span>
+                <a href="/resetpassword">Forgot password?</a>
 
             </p>
             <input type="submit" value="Login">
-            <span class="error"><%= locals.error %></span>
+            <span class="error">
+                <%= locals.error %>
+            </span>
             <div class="new">New to Comms? <a href="/register">Create an account</a></div>
-            
+
         </form>
     </main>
 
-
+    <script>
+        document.querySelector('.error').classList.add('transition-color');
+        setTimeout(() => {
+            document.querySelector('.error').style.color = 'rgb(228, 116, 116)';
+        }, 0);
+    </script>
 </body>
 
 </html>

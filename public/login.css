@@ -123,11 +123,20 @@ input[type='submit']:hover{
 }
 .error{
     font-weight: 500;
-   
-    color: rgb(228, 116, 116);
+    transition: color 1s ease-in;
+    color: red;
+
     text-align: center;
     margin-bottom: 20px;
+    
 }
+.error_native{
+    color: rgb(228, 116, 116);
+
+}
+.transition-color {
+    transition: color 2s, text-decoration 2s;
+  }
 
 .signin{
     background-color: #04293A;
