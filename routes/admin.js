@@ -64,8 +64,19 @@ router.get('/meetings',async (req,res) => { //show meeting table
 
  router.get('/meetings/delete/:id',async (req,res) => {
     try {
-        await pool.query('delete from meetings where id=$1',[req.params.id]);
+        await pool.query('delete from meetings where meetingid=$1',[req.params.id]);
         res.redirect('/admin/meetings');
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+ })
+
+ router.get('/forbidden_words', async (req,res) => {
+    try {
+        let words = (await pool.query('select * from forbidden_words')).rows;
+        console.log(words);
+        res.render('admin_forbidden_words',{words});
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

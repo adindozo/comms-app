@@ -140,12 +140,16 @@ table .ban{
 
 table .delete_meeting{
     padding: 10px;
-    background-image: url('https://thenounproject.com/api/private/icons/888071/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23FFFFFF&foregroundOpacity=1&imageFormat=png&rotation=0&token=gAAAAABjyYUKFAo8HPHJll7yHBrH8X_H9VWRlbI55SujQQmIfK9aNMzp1oFAfjvYhIXTqiI_zx8IRt8t0uNq1qXNKsQxpdLXDA%3D%3D');
+    background-image: url('/trash-icon.png');
+    background-size: contain;
     width: 10px;
     height: 10px;
     display: block;
+    opacity: 0.5;
 }
-
+table .delete_meeting:hover{
+    opacity: 1;
+}
 
 
 table a:hover{
@@ -156,4 +160,23 @@ table a:hover{
 
 tr:hover{
     filter: saturate(1.4);
+}
+
+.wordtag{
+    color: rgb(211, 211, 211);
+    background-color: rgb(207, 58, 47);
+    display: inline-block;
+    padding: 5px;
+    padding-right: 40px;
+    font-size: 20px;
+    margin: 10px;
+    background-image: url('/x.svg');
+    background-repeat: no-repeat;
+    background-position: center right 10px;
+    background-size: 10px;
+    border-radius: 5px;
+}
+
+.words_container{
+    padding: 0px 20%;
 }
