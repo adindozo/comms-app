@@ -2,6 +2,7 @@ require('dotenv').config(); //database credentials stored in .env
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const nodemailer = require('nodemailer');
+const Filter = require('bad-words');
 const jwt = require('jsonwebtoken');
 let path = require('path');
 const pg = require('pg');
@@ -92,7 +93,12 @@ io.on('connection', (socket) => {
     // }, 1000);
     
 
-   
+    socket.on('answer_question', async (question_id)=>{
+        await pool.query('update questions set answered = true where questionid = $1',[question_id]);
+        io.emit('remove_question', question_id);
+
+
+    })
     socket.on('questions-req', async (meetingid) => {
         try {
             //join socket to room first
@@ -108,6 +114,15 @@ io.on('connection', (socket) => {
     socket.on('add_question_fromClient', async (question_object, room) => {
         if (question_object.question.length == 0 || question_object.question.length > 120 || question_object.username > 30) return;
         try {
+            //retrieve list of "bad" words from database, purify question and then add that question to database and push to other clients
+            const filter = new Filter();
+            let newBadWords=[];
+            let newBadWordsObj = (await pool.query('select word from forbidden_words')).rows;
+            for(let word of newBadWordsObj){
+                newBadWords.push(word.word);
+            }
+            filter.addWords(...newBadWords); //... is spread operator
+            question_object.question=filter.clean(question_object.question);
             let new_question = (await pool.query(`insert into questions (question, likesnumber, answered, meetingID,username,unixtime) values
             ($1, $2,$3,$4,$5,$6) returning *`, [question_object.question, 0, false, question_object.meetingid, (question_object.username ? question_object.username : null), currentTimeInUnixTimestamp()])).rows[0];
             io.in(room).emit('new_question', new_question); //io.to and io.in is same
@@ -121,7 +136,7 @@ io.on('connection', (socket) => {
 
     socket.on('update_like_count', async (question_id, n)=>{
         try {
-            let a = await pool.query('update questions set likesnumber = $1 where questionid = $2',[n,question_id]);
+            await pool.query('update questions set likesnumber = $1 where questionid = $2',[n,question_id]);
             io.emit('update_like_count_fromServer',question_id,n);
             console.log(question_id)
         } catch (error) {

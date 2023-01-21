@@ -17,6 +17,7 @@
     "url": "https://github.com/adindozo/comms-app/issues"
   },
   "dependencies": {
+    "bad-words": "^3.0.4",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",

@@ -154,9 +154,9 @@ form.addEventListener('submit', async (e) => {
 
     }
 
-    if (functions.isDateInPast(unixstart) || functions.isDateInPast(unixend)) {
+    if (functions.isDateInPast(unixend)) {
 
-        return document.getElementById('error').innerHTML = 'Start and end times for business activities must be scheduled to take place in the future.';
+        return document.getElementById('error').innerHTML = 'End times for business activities must be scheduled to take place in the future.';
 
 
     }
@@ -234,7 +234,7 @@ function create_meeting_card(json_meeting) {
 
     let admin_panel_link = document.createElement('a');
     admin_panel_link.innerText = 'Administration panel';
-
+    admin_panel_link.href='/mymeetings/meeting_admin_panel/'+json_meeting.code;
 
 
     let delete_meeting_link = document.createElement('a');

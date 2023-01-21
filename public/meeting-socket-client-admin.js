@@ -72,31 +72,23 @@ function create_question_card(question) { // function dependent upon value sortb
     like_button.dataset.liked = 0;
     like_button.innerText = question.likesnumber;
 
-    like_button.addEventListener('click', (e) => {
+    like_button.style.cursor='not-allowed';
 
-        let n = parseInt(like_button.innerText);
-        if (e.target.dataset.liked == 1) {
-            e.target.dataset.liked = 0;
-            e.target.style.backgroundImage = "url('thumbs-up-regular.svg')";
-            like_button.innerText = n - 1;
-            e.target.classList.remove("animate__animated", "animate__bounceIn");
+    let answer_question_button = document.createElement('button');
 
-        }
-        else {
-            like_button.innerText = n + 1;
-            e.target.style.backgroundImage = "url('thumbs-up-solid.svg')";
-            e.target.dataset.liked = 1;
-            e.target.classList.add("animate__animated", "animate__bounceIn");
-        }
-        n = parseInt(like_button.innerText);
+    answer_question_button.addEventListener('click', (e) => {
         let question_id=e.target.parentNode.parentNode.id;
-        console.log('likeevent')
-        socket.emit('update_like_count', question_id, n);
+        document.getElementById(question_id).classList.add('answered');
+        socket.emit('answer_question', question_id);
 
     })
+    answer_question_button.className = 'answer_button';
 
-    name_and_likes_container.appendChild(name_span);
+    answer_question_button.title='Click to indicate that the question has been answered';
+
     name_and_likes_container.appendChild(like_button);
+    name_and_likes_container.appendChild(name_span);
+    name_and_likes_container.appendChild(answer_question_button);
 
     let age = document.createElement('span');
     age.className = 'age';
@@ -144,22 +136,13 @@ socket.on('connect', () => {
     
     socket.emit('questions-req', id); //on connection, user sends request for questions from meeting with provided id. That same id will be room.
     socket.on('questions-res', (questions_array) => {
-        for(let question of questions_array) {
-            if(question.answered) continue; //show only unanswered questions
-            create_question_card(question);
-        }
+        for(let question of questions_array) create_question_card(question);
         sort_question_cards(document.getElementById('sort').value);
     })
-    document.getElementById('send').addEventListener('click', (e) => {
-        document.querySelector('#question-chars-count').innerHTML=120;
-        e.preventDefault();
-        let question_object = {};
-        question_object.question = document.getElementById('question-input').value;
-        question_object.username = document.getElementById('name').value;
-        question_object.meetingid = id;
-        document.getElementById('question-input').value = '';
-        socket.emit('add_question_fromClient', question_object, id);//todo add question to databse and push to other connected clients.
-    })
+    
+    
+
+
     socket.on('new_question', (new_question) => {
         create_question_card(new_question);
     })
@@ -167,49 +150,11 @@ socket.on('connect', () => {
         document.getElementById(question_id).dataset.likes=n;
         document.getElementById(question_id).firstChild.getElementsByTagName('button')[0].innerText=n;
     })
-    socket.on('remove_question', (question_id)=>{
-        let questionDiv = document.getElementById(question_id);
-        if(questionDiv)questionDiv.parentNode.removeChild(questionDiv);
-    });
 })
 
-var input = document.getElementById("name");
-var charCount = document.getElementById("name-chars-count");
-
-input.addEventListener("input", updateCharCount);
-
-function updateCharCount() {
-    var charsLeft = input.maxLength - input.value.length;
-    charCount.innerHTML = charsLeft;
-    if (charsLeft == 0) {
-        charCount.style.color = "red";
-    } else {
-        charCount.style.color = "white";
-    }
-}
-let input2 = document.getElementById("question-input");
-let charCount2 = document.getElementById("question-chars-count");
-
-input2.addEventListener("input", updateCharCount2);
-
-function updateCharCount2() {
-    var charsLeft = input2.maxLength - input2.value.length;
-    charCount2.innerHTML = charsLeft;
-    if (charsLeft == 0) {
-        charCount2.style.color = "red";
-    } else {
-        charCount2.style.color = "white";
-    }
-}
-
-document.querySelector("textarea").addEventListener('keydown', (e) => {
-    if (e.keyCode == 13) e.preventDefault();
-});
 
 
-document.querySelector("input").addEventListener('keydown', (e) => {
-    if (e.keyCode == 13) e.preventDefault();
-});
+
 
 document.querySelector('.refresh').addEventListener('click',(e)=>{
     sort_question_cards(document.getElementById('sort').value);

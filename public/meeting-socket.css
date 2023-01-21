@@ -200,3 +200,17 @@ option{
 .refresh:hover{
     opacity: 1;
 }
+
+.answer_button{
+    background-image: url('check-solid.svg');   
+    padding: 10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 0px;
+    cursor: pointer;
+}
+
+.answered{
+    outline: 1px solid green;
+}

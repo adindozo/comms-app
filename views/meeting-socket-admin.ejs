@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.2.1/luxon.min.js"
+        integrity="sha512-pyR2hpC7bLig9Ub4eUIOC/BAO4anpdt7jhpF4dfrPv+qIg+KWztdVjFPCRCsRaWVfUylUCvrrxqMFNrJBdQIjQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Eo_circle_red_letter-c.svg"
+        type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live meeting "<%= locals.meeting.name %>"</title>
+    <script defer src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>let code = <%= locals.meeting.code %>; let custom_cover_photo = <%= locals.meeting.coverphoto %>; let id = <%= locals.meeting.meetingid %></script>
+    <script defer src="/meeting-socket-client-admin.js"></script>
+    <link rel="stylesheet" href="/meeting-socket.css">
+
+</head>
+
+<body>
+    <header>
+        <span class="comms">comms_</span>
+        <span class="name">
+            <%= locals.meeting.name %> meeting
+        </span>
+        <span></span>
+    </header>
+    <main>
+        <!-- when admin connects on web socket, push all questions from that meeting to admin and populate DOM tree -->
+        
+        <!--<div class="question_card">
+            <p class="name-and-likes-container"> 
+                <span class="username">Anonymous</span>
+                <button data-liked="0" class="like">23</button>
+            </p>
+            <span class="age">13 years ago</span>
+            <p class="question">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi reiciendis blanditiis ipsam ad beatae eum eius, atque est nobis a sunt impedit voluptatem magnam ratione laudantium magni nulla architecto optio!</p>
+
+        </div>-->
+        <p class="sortc"> 
+            <select id="sort">
+                <option value="time">Recently added</option>
+                <option value="likes">Popular</option>
+            </select>
+            <button class="refresh">Sort</button>
+        </p>
+        <div id="question_container">
+            
+        </div>
+    </main>
+
+
+</body>
+
+</html>
