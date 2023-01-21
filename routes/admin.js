@@ -83,6 +83,30 @@ router.get('/meetings',async (req,res) => { //show meeting table
     }
  })
  
+ router.get('/forbidden_words/delete/:id', async (req,res) => {
+    try {
+        await pool.query('delete from forbidden_words where id=$1',[req.params.id]);
+        res.redirect('/admin/forbidden_words');
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+ })
+ 
+ router.get('/forbidden_words/add', async (req,res) => {
+    try {
+        let word = req.query.word.toLowerCase();
+        await pool.query('INSERT INTO forbidden_words (word) VALUES ($1);',[word]);
+        res.redirect('/admin/forbidden_words');
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+ })
+ 
+ 
+ 
+ 
  
  
  

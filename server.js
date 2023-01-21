@@ -164,9 +164,6 @@ app.get('/authTEST', (req, res) => {
 const mymeetingsRouter = require('./routes/mymeetings');
 app.use('/mymeetings', mymeetingsRouter);
 
-const adminRouter = require('./routes/admin');
-app.use('/admin', adminRouter);
-
 
 
 const send_mailRouter = require('./routes/send_mail');
@@ -174,13 +171,20 @@ app.use('/send_mail', send_mailRouter)
 
 
 
-
-
-
 const share_codeRouter = require('./routes/share_code');
 app.use('/share_code', share_codeRouter);
 
 
+let admin_auth_middleware = (req,res,next)=>{
+    if(req.user.role=='admin') next(); else res.sendStatus(403);
+    
+}
+
+//all requests after this line will use the admin auth middleware, user info(from database) is in req.user object.
+/*-----------------------------------*/app.use(admin_auth_middleware);/*----------------------------------------*/
+
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
 
 server.listen(8080, () => {
     console.log('listening on port 8080');

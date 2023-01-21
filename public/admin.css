@@ -76,21 +76,24 @@ nav a{
     background-size: 15px;
 }
 nav a:nth-child(1){
-    margin-top: 100px;
+    width: 100px;
+    text-align: center;
+    padding: 20px 0px;
+    color: var(--color-100);
     
 }
 nav a:hover{
     background-color: var(--color-200);
 }
 
-nav a:nth-child(1){
+nav a:nth-child(2){
     background-image: url('profile-icon.svg');
 }
-nav a:nth-child(2){
+nav a:nth-child(3){
     background-image: url('meeting-icon.svg');
 }
 
-nav a:nth-child(3){
+nav a:nth-child(4){
     background-image: url('/swear-icon.png');
     background-size: 25px;
 }
@@ -179,4 +182,33 @@ tr:hover{
 
 .words_container{
     padding: 0px 20%;
+}
+
+.form{
+    margin: auto;
+    text-align: center;
+    padding: 20px 0px;
+}
+
+.form input{
+    margin: 0px;
+    padding: 5px;
+    outline: 0px;
+    border-radius: 0px;
+    border: 0px ;
+}
+
+input[type='text']{
+    height: 25.3px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+input[type='submit']{
+    background-color: var(--color-200);
+    color: white;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
 }

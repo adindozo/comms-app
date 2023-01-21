@@ -18,18 +18,23 @@
     </header>
     <nav class="menu">
         <ul>
+            <a href="/">Homepage</a>
             <a href="/admin/users">Accounts</a>
             <a href="/admin/meetings">Meetings</a>
             <a href="/admin/forbidden_words"  class="selected_menu">Forbidden Words</a>
         </ul>
     </nav>
-    <main class="words_container">
+    <main>
+        <form action="/admin/forbidden_words/add" method="get" class="form">
+            <input required type="text" placeholder="Type word..." name="word" pattern="[a-zA-Z]+" id="word"><input type="submit" value="Forbid">
+        </form>
+        <div class="words_container">
         <h1>Prohibited words</h1>
 
         <% for(let word of words) {%>
-            <a id="<%= word.id %>" class="wordtag" href="#"><%=word.word%></a>    
+            <a id="<%= word.id %>" class="wordtag" href="/admin/forbidden_words/delete/<%= word.id %> "><%=word.word%></a>    
         <% } %>
-
+        </div>
     </main>
 
 </body>
