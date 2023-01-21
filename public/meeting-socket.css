@@ -113,6 +113,7 @@ p{
 }
 
 .question_card{
+   
     padding: 20px;
     background-color: transparent;
     width: 500px;
@@ -212,5 +213,7 @@ option{
 }
 
 .answered{
+    transition: outline 1s ease-in;
     outline: 1px solid green;
 }
+

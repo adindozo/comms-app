@@ -167,9 +167,15 @@ socket.on('connect', () => {
         document.getElementById(question_id).dataset.likes=n;
         document.getElementById(question_id).firstChild.getElementsByTagName('button')[0].innerText=n;
     })
-    socket.on('remove_question', (question_id)=>{
+    socket.on('remove_question', async(question_id)=>{
         let questionDiv = document.getElementById(question_id);
-        if(questionDiv)questionDiv.parentNode.removeChild(questionDiv);
+        if(questionDiv){
+            questionDiv.className='question_card';
+            questionDiv.classList.add('animate__animated','animate__bounceOut');
+            setTimeout(() => {
+                questionDiv.remove();
+            }, 1000);
+        }
     });
 })
 

@@ -55,10 +55,15 @@ function create_question_card(question) { // function dependent upon value sortb
 
     // </div>
 
-    let question_card = document.createElement('div');
+    let question_card = document.createElement('div'); 
     question_card.id = question.questionid;
     question_card.classList.add('question_card');
-
+    if(question.answered) {
+        setTimeout(() => {
+            question_card.classList.add('answered');
+        }, 0);
+      
+    }
     let name_and_likes_container = document.createElement('p');
     name_and_likes_container.className = 'name-and-likes-container';
 
