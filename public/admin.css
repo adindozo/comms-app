@@ -76,7 +76,8 @@ nav a{
     background-size: 15px;
 }
 nav a:nth-child(1){
-    width: 100px;
+    font-size: 18px;
+    width: 100%;
     text-align: center;
     padding: 20px 0px;
     color: var(--color-100);
@@ -213,3 +214,8 @@ input[type='submit']{
     cursor: pointer;
 }
 
+a.home{
+    width: 100%;
+    text-align: center;
+    color: hotpink;
+}

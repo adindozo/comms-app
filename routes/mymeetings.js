@@ -139,5 +139,18 @@ router.get('/meeting_admin_panel/:code',async (req,res) => {
     res.render('meeting-socket-admin',{meeting});
 })
 
+router.get('/stats/:code',async (req,res) => {
+    let code = req.params.code;
+    if(code.length!=8 || (!/^\d+$/.test(code))) return res.sendStatus(406);
+    let meetingid = (await(pool.query('select meetingid from meetings where code=$1',[code]))).rows[0].meetingid;
+    if(!meetingid) return res.render('no-meeting',{code, error: 'Unfortunately, there is no such event active right now.'})
+    //after this line is code for available meeting
+    let questions = (await pool.query('select question, answered, username from questions where meetingid=$1',[meetingid])).rows;
+    console.log(meetingid)
+    console.log(questions)
+    res.render('meeting_stats',{meetingid, questions});
+})
+
+
 
 module.exports = router;

@@ -82,15 +82,18 @@ function create_question_card(question) { // function dependent upon value sortb
     let answer_question_button = document.createElement('button');
 
     answer_question_button.addEventListener('click', (e) => {
+        e.target.style.visibility='hidden';
         let question_id=e.target.parentNode.parentNode.id;
         document.getElementById(question_id).classList.add('answered');
         socket.emit('answer_question', question_id);
 
     })
+    
     answer_question_button.className = 'answer_button';
 
     answer_question_button.title='Click to indicate that the question has been answered';
 
+    if(question.answered) answer_question_button.style.visibility='hidden';
     name_and_likes_container.appendChild(like_button);
     name_and_likes_container.appendChild(name_span);
     name_and_likes_container.appendChild(answer_question_button);

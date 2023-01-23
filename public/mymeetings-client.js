@@ -236,6 +236,9 @@ function create_meeting_card(json_meeting) {
     admin_panel_link.innerText = 'Administration panel';
     admin_panel_link.href='/mymeetings/meeting_admin_panel/'+json_meeting.code;
 
+    let stats_link = document.createElement('a');
+    stats_link.innerText = 'Analytics';
+    stats_link.href='/mymeetings/stats/'+json_meeting.code;
 
     let delete_meeting_link = document.createElement('a');
     delete_meeting_link.innerText = 'Delete';
@@ -261,6 +264,7 @@ function create_meeting_card(json_meeting) {
     menu.appendChild(share_code_link);
     menu.appendChild(admin_panel_link);
     menu.appendChild(delete_meeting_link);
+    menu.appendChild(stats_link);
     menu.className = 'ellipsis_menu';
     // three_dots.dataset.meetingid=json_meeting.meetingid;
     three_dots.id = json_meeting.meetingid;

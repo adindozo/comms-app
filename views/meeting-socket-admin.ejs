@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live meeting "<%= locals.meeting.name %>"</title>
+    <title><%= locals.meeting.name %> | Host window</title>
     <script defer src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>let code = <%= locals.meeting.code %>; let custom_cover_photo = <%= locals.meeting.coverphoto %>; let id = <%= locals.meeting.meetingid %></script>
     <script defer src="/meeting-socket-client-admin.js"></script>

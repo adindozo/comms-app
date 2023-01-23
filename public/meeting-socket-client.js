@@ -1,5 +1,10 @@
 console.log(code);
-console.log(custom_cover_photo);
+console.log(custom_cover_photo); 
+if(custom_cover_photo){
+    
+    document.querySelector('body').style.backgroundImage=(`linear-gradient(to bottom, rgba(4, 41, 58, 0.98), rgba(4, 41, 58, 0.92)), url('/meeting_pictures/${id}.jpeg')`);
+    document.querySelector('main').style.backgroundColor=(`transparent`);
+}
 console.log(id);
 let sortby = 'time';//2 values for sortby: time and likes. Default 'time'. If value is time new questions are added by LIFO stack, otherwise FIFO queue
 document.getElementById('sort').addEventListener('change',(e)=>{
@@ -171,9 +176,12 @@ socket.on('connect', () => {
         let questionDiv = document.getElementById(question_id);
         if(questionDiv){
             questionDiv.className='question_card';
-            questionDiv.classList.add('animate__animated','animate__bounceOut');
-            setTimeout(() => {
-                questionDiv.remove();
+            questionDiv.classList.add('answered');//on 'remove question' create green outline 
+            setTimeout(() => { 
+                questionDiv.classList.add('animate__animated','animate__bounceOut'); //wait 1 sec then play animation which lasts 1 sec 
+                setTimeout(() => {
+                    questionDiv.remove(); //after 2 secs remove element from DOM
+                }, 1000);
             }, 1000);
         }
     });

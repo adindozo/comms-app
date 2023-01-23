@@ -53,7 +53,7 @@ main{
 }
 .question-creation-box{
     padding: 20px;
-    background-color: transparent;
+    background-color: var(--color-300);
     width: 500px;
     display: block;
     margin: auto;
@@ -115,7 +115,7 @@ p{
 .question_card{
    
     padding: 20px;
-    background-color: transparent;
+    background-color: var(--color-300);
     width: 500px;
     display: block;
     margin: auto;
@@ -156,6 +156,15 @@ p{
   
     word-break: break-all;
     
+}
+
+#question_container{
+    background-color: transparent;
+}
+
+.refresh, #sort, .sortc{
+    background-color: transparent;
+
 }
 
 .sortc{
@@ -217,3 +226,8 @@ option{
     outline: 1px solid green;
 }
 
+body{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}

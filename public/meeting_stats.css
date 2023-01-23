@@ -1,0 +1,52 @@
+:root {
+    --color-400: #041C32;
+    --color-300: #04293A;
+    --color-200: #064663;
+    --color-100: #ECB365;
+  }
+
+  *{
+    margin: 0px;
+    padding: 0px;
+  }
+
+#chartSigned{
+ background-color: transparent;
+}
+
+
+main{
+    background-color: var(--color-300);
+    min-height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+}
+
+body{
+    background-color: var(--color-300);
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.js-plotly-plot{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media only screen and (max-width: 1000px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .js-plotly-plot {
+        width: 100%;
+    }
+}
+
