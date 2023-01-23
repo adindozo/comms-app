@@ -20,52 +20,54 @@
         <span id="logo">comms_</span>
         <%- Boolean(locals.username) ? `<a id='user_button' href="/mymeetings">${locals.username}'s meetings</a>
             <div id="login"><a id="logout" href="/logout">Log out</a></div>` :`<div id="login"><a
-                    href="/register">Register</a> <a href="/login">Log in</a></div>` %>
+                    href="/register">Register</a> <a href="/login">Sign in</a></div>` %>
     </header>
-    <main>
+    <div class="welcome-video-container">
+    <video class="welcome-video" autoplay muted loop id="myVideo">
+        <source src="/background-video.mp4" type="video/mp4">
+    </video>
+    <div class="welcome-video-container-after">
+        <div class="join_meeting">
         <h1 class="main_title">Joining a meeting?</h1>
         <form action="/join_meeting" method="GET">
             <input type="text" pattern="[0-9]{8}" name="code" id="code" placeholder="8-digit code" required>
             <button formtarget='_blank' type="submit" id="join"></button>
         </form>
-        <p class="desc">Interact with your audience in real time</p>
+        </div>
+        <p class="desc">Interact with your audience in real time.</p>
+    </div>
+    </div>
+   
+    <main>
+        
+        
         <p class="subdesc">Comms platform allows you to communicate with
             your audience in a live and immediate way. This can be especially useful for events, webinars, or any other
             situation where you want to engage with your audience and get their feedback or questions in real time.</p>
             
-        <a href="/register" class="create_meeting">Register to create your own meeting</a>
+        <a href="/mymeetings" class="create_meeting">Create your own meeting today!</a>
         <h2>Customizable</h2>
         <div class="leftfeature"> 
-            Event meetings are customizable in a way that users can change the background image of event meetings.
+            Users can change the background image of event meetings.
             This can be especially useful for event organizers who want to create a specific theme or atmosphere for
-            their event meetings. For example, presenters could choose a background image that reflects the topic or
-            theme of
-            the event.
+            their event meetings. 
         </div>
         <h2>Real time interactions</h2>
         <div class="rightfeature"> 
-            With live-interactions support, attendees can ask questions, share their thoughts and opinions, and engage
+            With live-interactions support, attendees can ask questions, share their thoughts, and engage
             with the event
             as it is happening.
 
             This can be especially useful for events and webinars where the organizers want to create a more interactive
-            and engaging experience for their attendees. For example, event organizers could use a live Q&A platform to
-            allow attendees to ask questions and get immediate responses, or set up a chat room where attendees can
-            discuss the event and share their thoughts with each other.
-        </div>
-        <h2>Secure</h2>
-        <div class="leftfeature"> 
-            Passwords are one-way hashed and stored in a database which helps to protect the privacy and security of the
-            Comms users.
-
-            Storing passwords in a database in this way helps to ensure that user passwords are secure and cannot be
-            accessed by unauthorized parties. It also helps to protect against password cracking attacks, in which an
-            attacker tries to guess or determine a user's password by trying different combinations of characters.
+            and engaging experience for their attendees. Event organizers are able to use a live Q&A meeting platform to
+            allow attendees to ask questions which would be shared via video streaming platform.
         </div>
         <h2>Open source</h2>
-        <div class="rightfeature"> 
+        <div class="leftfeature"> 
             Last but not least, the 'comms' code is open source, meaning it is freely available for anyone to view, modify, and distribute.
+            
         </div>
+        
 
         
     </main>

@@ -229,16 +229,18 @@ function create_meeting_card(json_meeting) {
 
     let share_code_link = document.createElement('a');
     share_code_link.href = '/' + 'share_code/' + json_meeting.code + '/' + json_meeting.name;
-    share_code_link.target = 'blank';
+    share_code_link.target = '_blank';
     share_code_link.innerText = 'Share invitation code';
 
     let admin_panel_link = document.createElement('a');
     admin_panel_link.innerText = 'Administration panel';
     admin_panel_link.href='/mymeetings/meeting_admin_panel/'+json_meeting.code;
+    admin_panel_link.target = '_blank';
 
     let stats_link = document.createElement('a');
     stats_link.innerText = 'Analytics';
     stats_link.href='/mymeetings/stats/'+json_meeting.code;
+    stats_link.target = '_blank';
 
     let delete_meeting_link = document.createElement('a');
     delete_meeting_link.innerText = 'Delete';
