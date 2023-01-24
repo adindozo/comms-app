@@ -1,29 +1,36 @@
-
 /* https://colorhunt.co/palette/041c3204293a064663ecb365 */
+/* font-family: 'Rubik', sans-serif;
+font-family: 'Tenor Sans', sans-serif; */
 
 :root {
     --color-400: #041C32;
     --color-300: #04293A;
     --color-200: #064663;
     --color-100: #ECB365;
-  }
-body{
-    margin: 0px;
+    --purple: rgb(123, 31, 162);
+  --violet: rgb(103, 58, 183);
+  --pink: rgb(244, 143, 177);
 }
 
-header{
+body {
+    margin: 0px;
+    font-family: 'Rubik', sans-serif;
+}
+
+header {
     position: sticky;
     top: 0px;
     font-family: 'IBM Plex Sans', sans-serif;
     display: flex;
     justify-content: space-around;
- 
+
     background-color: var(--color-400);
     min-height: 100px;
-   
+
 }
-header a{
-    
+
+header a {
+
     width: 50%;
     background-color: var(--color-200);
     text-decoration: none;
@@ -36,30 +43,31 @@ header a{
     margin-left: 40px;
 }
 
-header a:hover{
+header a:hover {
     filter: saturate(200%);
     box-shadow: 5px 0px 0px 0px var(--color-100);
     transition: box-shadow 0.15s ease-out, filter 0.15s ease-out, background-color 0.15s ease-out;
 
-    
+
 }
 
-header a:not(:hover){
+header a:not(:hover) {
     transition: box-shadow 0.15s ease-in, filter 0.15s ease-in, background-color 0.15s ease-in;
 }
 
-#login{
+#login {
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    
-   
+
+
+
 }
 
 
 
-#logo{
+#logo {
+    font-family: 'Tenor Sans', sans-serif;
     color: var(--color-100);
     display: flex;
     justify-content: center;
@@ -68,7 +76,8 @@ header a:not(:hover){
     cursor: default;
 }
 
-#user_button, #user_button:hover{
+#user_button,
+#user_button:hover {
     border-radius: 0px;
     filter: none;
     box-shadow: none;
@@ -77,11 +86,12 @@ header a:not(:hover){
     margin: 0px;
     padding: 11px 40px;
 }
-#user_button:hover{
+
+#user_button:hover {
     background-color: var(--color-200);
 }
 
-main{
+main {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     color: white;
@@ -89,48 +99,55 @@ main{
     min-height: calc(100vh - 200px);
 }
 
-.main_title{
+.main_title {
+    font-weight: 300;
+    font-size: 24px;
     grid-column: 4 / 6;
     text-align: center;
 }
 
-form{
+h2 {
+    font-weight: 300;
+
+}
+
+form {
     display: flex;
     align-items: center;
     justify-content: center;
     grid-column: 3 / 7;
     text-align: center;
-    
+
 }
 
-form > * {
+form>* {
     padding: 10px 20px;
     text-align: center;
     border: none;
     margin: 0px;
-    
+
 }
 
-form > input {
+form>input {
     border-radius: 10px 0 0 10px;
     min-width: 40%;
     font-size: 24px;
     background-color: rgba(255, 255, 255, 0.8)
-    
-}
-form > input:focus{
-    border: none;
-    outline: none;
-    
 }
 
-form > button {
+form>input:focus {
+    border: none;
+    outline: none;
+
+}
+
+form>button {
     background-color: var(--color-100);
     border-radius: 0 10px 10px 0;
     min-width: 20%;
 }
 
-#join{
+#join {
     background-image: url('arrow-right-to-bracket-solid.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -140,7 +157,7 @@ form > button {
     cursor: pointer;
 }
 
-.desc{
+.desc {
     transition: opacity 1s ease-in-out;
 
     opacity: 0;
@@ -152,37 +169,67 @@ form > button {
     margin-top: 35vh;
 }
 
-.subdesc{
+@keyframes background-pan {
+    from {
+      background-position: 0% center;
+    }
+    
+    to {
+      background-position: -200% center;
+    }
+  }
+
+.magic{
+    animation: background-pan 3s linear infinite;
+    background: linear-gradient(
+      to right,
+      var(--purple),
+      var(--violet),
+      var(--pink),
+      var(--purple)
+    );
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+  }
+  
+
+
+.subdesc {
+    font-weight: 300;
+    margin-top: 0px;
     grid-column: 3 / 7;
     text-align: center;
-    font-size: 21px;
+    font-size: 18px;
 }
 
-.leftfeature{
+.leftfeature {
     grid-column: 2 / 4;
 }
 
-.rightfeature{
+.rightfeature {
     grid-column: 6 / 8;
 }
 
-footer{
+footer {
     color: rgba(255, 255, 255, 0.407);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     width: 100%;
     min-height: 100px;
-    background-color:  var(--color-400);
+    background-color: var(--color-400);
 }
-footer span{
+
+footer span {
     margin: 0px 20px;
     color: rgba(255, 255, 255, 0.407);
     text-decoration: none;
 }
 
-footer a{
+footer a {
     margin: 0px 20px;
     color: snow;
     opacity: 0.5;
@@ -193,29 +240,39 @@ footer a{
     padding-right: 30px;
     text-decoration: none;
 }
-footer a:hover{
+
+footer a:hover {
     text-decoration: underline;
     opacity: 1;
 }
 
-.create_meeting{
+.create_meeting {
+    font-weight: 300;
     grid-column: 4 / 6;
     text-align: center;
     min-width: 50%;
     margin: auto;
-    background-color: var(--color-100);
+    margin-bottom: 40vh;
+    color: rgb(255, 255, 255);
+    background-color: var(--color-200);
     border: none;
     border-radius: 10px;
     text-decoration: none;
-    color: black;
     font-size: 24px;
     padding: 5px 20px;
 }
 
-h2{
+.create_meeting:hover{
+    filter: saturate(2);
+
+
+}
+
+h2 {
     grid-column: 1 / -1;
     text-align: center;
 }
+
 .welcome-video-container-after {
     transition: all 1s ease-in-out;
     color: white;
@@ -233,9 +290,12 @@ h2{
     background-repeat: no-repeat;
     background-position: center;
     background-size: 50%;
-    background-color: rgba(0, 0, 0,1);
-  }
-.welcome-video-container{
+    background-color: rgba(0, 0, 0, 1);
+    /* background-attachment: fixed; */
+}
+
+
+.welcome-video-container {
     position: relative;
     min-height: 100vh;
     min-width: 100vw;
@@ -244,17 +304,19 @@ h2{
     justify-content: center;
 
 }
-.welcome-video{
+
+.welcome-video {
     object-fit: cover;
     min-height: 100vh;
     min-width: 100vw;
 
 }
-*{
+
+* {
     overflow-x: hidden;
 }
 
-header{
+header {
     transition: opacity 1s ease-in-out;
     opacity: 0;
     z-index: 999;
@@ -263,13 +325,62 @@ header{
     width: 100%;
 }
 
-.join_meeting{
+.join_meeting {
     opacity: 0;
     transition: opacity 1s ease-out;
     position: absolute;
     top: 100px;
 }
 
-.logo{
-    width: 800px;
+h3{
+    margin-top: 40vh;
+    font-size: 48px;
+    text-align: center;
+    grid-column: 2 / 8;
+    letter-spacing: 3px;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+@media only screen and (max-width: 1000px) {
+    .welcome-video-container-after {
+        background-size: 100%;
+    }
+}
+
+@media only screen and (max-width: 652px) {
+    footer a {
+        background-size: 20%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .welcome-video-container-after {
+        background-size: 150%;
+    }
+
+    #logo {
+        display: none;
+    }
+
+    header a {
+        margin: 0px;
+        width: auto;
+    }
+
+    #login {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    footer a{
+        background-size: contain;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 }

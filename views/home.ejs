@@ -2,6 +2,10 @@
 <html lang="en">
 
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400&family=Tenor+Sans&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,43 +21,45 @@
 
 <body>
     <header>
-        <span id="logo">comms_</span>
+        <span id="logo">comms</span>
         <%- Boolean(locals.username) ? `<a id='user_button' href="/mymeetings">${locals.username}'s meetings</a>
             <div id="login"><a id="logout" href="/logout">Log out</a></div>` :`<div id="login"><a
                     href="/register">Register</a> <a href="/login">Sign in</a></div>` %>
     </header>
     <div class="welcome-video-container">
-    <video class="welcome-video" autoplay muted loop id="myVideo">
-        <source src="/background-video.mp4" type="video/mp4">
-    </video>
-    <div class="welcome-video-container-after">
-        <div class="join_meeting">
-        <h1 class="main_title">Joining a meeting?</h1>
-        <form action="/join_meeting" method="GET">
-            <input type="text" pattern="[0-9]{8}" name="code" id="code" placeholder="8-digit code" required>
-            <button formtarget='_blank' type="submit" id="join"></button>
-        </form>
+        <video class="welcome-video" autoplay muted loop id="myVideo">
+            <source src="/background-video.mp4" type="video/mp4">
+        </video>
+        <div class="welcome-video-container-after">
+            <div class="join_meeting">
+                <h1 class="main_title">Joining a meeting?</h1>
+                <form action="/join_meeting" method="GET">
+                    <input type="text" pattern="[0-9]{8}" name="code" id="code" placeholder="8-digit code" required>
+                    <button formtarget='_blank' type="submit" id="join"></button>
+                </form>
+            </div>
+            <p class="desc">Interact with your audience in real time.</p>
         </div>
-        <p class="desc">Interact with your audience in real time.</p>
     </div>
-    </div>
-   
+
     <main>
-        
-        
-        <p class="subdesc">Comms platform allows you to communicate with
-            your audience in a live and immediate way. This can be especially useful for events, webinars, or any other
-            situation where you want to engage with your audience and get their feedback or questions in real time.</p>
-            
-        <a href="/mymeetings" class="create_meeting">Create your own meeting today!</a>
+
+        <h3>
+            Ultimate Q&A tool for <span class="magic">seamless</span> meetings.
+        </h3>
+        <p class="subdesc">With easy-to-use
+            interface, you can create and schedule meetings with just a few clicks. Invite your audience and give them
+            the opportunity to ask questions and participate in real-time. </p>
+
+        <a href="/mymeetings" class="create_meeting">Create your own meeting today</a>
         <h2>Customizable</h2>
-        <div class="leftfeature"> 
+        <div class="leftfeature">
             Users can change the background image of event meetings.
             This can be especially useful for event organizers who want to create a specific theme or atmosphere for
-            their event meetings. 
+            their event meetings.
         </div>
         <h2>Real time interactions</h2>
-        <div class="rightfeature"> 
+        <div class="rightfeature">
             With live-interactions support, attendees can ask questions, share their thoughts, and engage
             with the event
             as it is happening.
@@ -63,17 +69,18 @@
             allow attendees to ask questions which would be shared via video streaming platform.
         </div>
         <h2>Open source</h2>
-        <div class="leftfeature"> 
-            Last but not least, the 'comms' code is open source, meaning it is freely available for anyone to view, modify, and distribute.
-            
-        </div>
-        
+        <div class="leftfeature">
+            Last but not least, the 'comms' code is open source, meaning it is freely available for anyone to view,
+            modify, and distribute.
 
-        
+        </div>
+
+
+
     </main>
     <footer>
-        <%- locals.role=='admin' ? '<a href="/admin/users">Site administration</a>' : '<span></span>'%>
-        <span>© 2022 Comms Platform, Inc. Developed by Adin Đozo</span>
+        <%- locals.role=='admin' ? '<a href="/admin/users">Site administration</a>' : '<span></span>' %>
+            <span>© 2022 Comms Platform, Inc. Developed by Adin Đozo</span>
     </footer>
 </body>
 
