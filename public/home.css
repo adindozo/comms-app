@@ -92,11 +92,14 @@ header a:not(:hover) {
 }
 
 main {
+    
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     color: white;
     background-color: var(--color-300);
     min-height: calc(100vh - 200px);
+    align-items: center;
+  justify-content: center;
 }
 
 .main_title {
@@ -196,17 +199,8 @@ form>button {
   
 
 
-.subdesc {
-    font-weight: 300;
-    margin-top: 0px;
-    grid-column: 3 / 7;
-    text-align: center;
-    font-size: 18px;
-}
 
-.leftfeature {
-    grid-column: 2 / 4;
-}
+
 
 .rightfeature {
     grid-column: 6 / 8;
@@ -252,14 +246,15 @@ footer a:hover {
     text-align: center;
     min-width: 50%;
     margin: auto;
-    margin-bottom: 40vh;
+    margin-bottom: 20vh;
     color: rgb(255, 255, 255);
     background-color: var(--color-200);
     border: none;
     border-radius: 10px;
     text-decoration: none;
     font-size: 24px;
-    padding: 5px 20px;
+    padding: 10px 20px;
+    box-shadow: 0px 0px 3px 0px black;
 }
 
 .create_meeting:hover{
@@ -336,18 +331,37 @@ h3{
     margin-top: 40vh;
     font-size: 48px;
     text-align: center;
-    grid-column: 2 / 8;
+    grid-column: 1 / -1;
     letter-spacing: 3px;
     font-weight: 300;
     margin-bottom: 20px;
 }
+
+.subdesc {
+    font-weight: 300;
+    margin-top: 0px;
+    grid-column: 2 / 8;
+    text-align: center;
+    font-size: 18px;
+}
+
+
+
 @media only screen and (max-width: 1000px) {
     .welcome-video-container-after {
         background-size: 100%;
     }
+    .create_meeting {
+        
+        grid-column: 1 / -1;
+       
+    }
 }
 
 @media only screen and (max-width: 652px) {
+    .subdesc {
+        grid-column: 1 / -1;
+    }
     footer a {
         background-size: 20%;
     }
@@ -383,4 +397,58 @@ h3{
         margin-bottom: 20px;
         text-align: center;
     }
+}
+.rightfeatureimg1{
+    background-image: url('/custom-cover-ft.png');
+    grid-column: 4 / -1;
+    object-fit: contain;
+    height: 50vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin-top: 25vh;
+    margin-bottom: 25vh;
+}
+.rightfeatureimg3{
+    background-image:
+    radial-gradient(rgba(4, 41, 58, 0.486), rgb(4, 41, 58)), 
+    url('/git.jpeg');
+    
+    grid-column: 4 / -1;
+    object-fit: contain;
+    height: 20vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin-top: 25vh;
+    margin-bottom: 25vh;
+}
+.leftfeatureimg2{
+    background-image: url('/live.gif');
+    grid-column: 1 / 6;
+    object-fit: contain;
+    height: 50vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin-top: 25vh;
+    margin-bottom: 25vh;
+}
+img{
+   width: 100%;
+}/* }<img src="/custom-cover-ft.png" alt="Custom cover photo example"> */
+
+.leftfeature {
+    grid-column: 2 / 4;
+  
+}
+
+.leftfeature, .rightfeature{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+.leftfeature a{
+    color: white;
 }

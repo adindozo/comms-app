@@ -1,5 +1,8 @@
 const input = document.getElementById('code');
-
+AOS.init();
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+}
 input.addEventListener('input', function () {
     if (this.value.length > 8) {
         this.value = this.value.slice(0, 8);

@@ -2,7 +2,7 @@ console.log(code);
 console.log(custom_cover_photo); 
 if(custom_cover_photo){
     
-    document.querySelector('body').style.backgroundImage=(`linear-gradient(to bottom, rgba(4, 41, 58, 0.98), rgba(4, 41, 58, 0.92)), url('/meeting_pictures/${id}.jpeg')`);
+    document.querySelector('body').style.backgroundImage=(`radial-gradient(rgba(4, 41, 58, 0.98), rgba(4, 41, 58, 0.72)), url('/meeting_pictures/${id}.jpeg')`);
     document.querySelector('main').style.backgroundColor=(`transparent`);
 }
 console.log(id);

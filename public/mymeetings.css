@@ -9,11 +9,12 @@
   }
 body{
     margin: 0px;
+    font-family: 'Rubik', sans-serif;
+
 }
 
 
 header{
-    font-family: 'IBM Plex Sans', sans-serif;
     display: flex;
     justify-content: space-around;
  
@@ -59,6 +60,7 @@ header a:not(:hover){
 
 
 #logo{
+font-family: 'Tenor Sans', sans-serif; 
     color: var(--color-100);
     display: flex;
     justify-content: center;
@@ -106,6 +108,8 @@ footer span{
 
 
 #new-meeting-button{
+    font-family: 'Rubik', sans-serif;
+    
     grid-column: -3 / -1;
     text-align: center;
     min-width: 300px;
@@ -266,6 +270,7 @@ label{
 }
 
 .meeting_list li{
+    font-weight: 300;
     position: relative;
     display: grid;
     grid-template-columns: 100px auto 50px;
@@ -278,6 +283,7 @@ label{
     border-bottom: 1px solid var(--color-300);
 }
 .ellipsis_menu{
+    font-weight: 400;
     border-radius: 5px;
     box-shadow: 0px 0px 25px 0px black;
     margin: 0px;
@@ -333,7 +339,7 @@ label{
 }
 
 .meeting_name{
-    font-size: 2em;
+    font-size: 1.8em;
     display: flex;
     align-items: center;
     grid-column: 2 / 3;

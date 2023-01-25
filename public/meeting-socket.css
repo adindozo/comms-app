@@ -7,6 +7,8 @@
     --color-100: #ECB365;
 }
 *{
+    font-family: 'Rubik', sans-serif;
+
     margin: 0px;
     padding: 0px;
     background-color: var(--color-300);
@@ -30,6 +32,8 @@ header{
 }
 
 .comms{
+    font-family: 'Tenor Sans', sans-serif; 
+
     background-color: var(--color-400);
     color: var(--color-100);
     font-size: 32px;
@@ -126,12 +130,13 @@ p{
 }
 
 .username{
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 400;
 }
 
 .question{
     font-size: 15px;
+    font-weight: 300;
 }
 
 .age{
@@ -154,7 +159,7 @@ p{
 
 .question{
   
-    word-break: break-all;
+    word-break: break-word;
     
 }
 
