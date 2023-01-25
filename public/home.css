@@ -20,7 +20,6 @@ body {
 header {
     position: sticky;
     top: 0px;
-    font-family: 'IBM Plex Sans', sans-serif;
     display: flex;
     justify-content: space-around;
 
@@ -202,9 +201,7 @@ form>button {
 
 
 
-.rightfeature {
-    grid-column: 6 / 8;
-}
+
 
 footer {
     color: rgba(255, 255, 255, 0.407);
@@ -347,57 +344,7 @@ h3{
 
 
 
-@media only screen and (max-width: 1000px) {
-    .welcome-video-container-after {
-        background-size: 100%;
-    }
-    .create_meeting {
-        
-        grid-column: 1 / -1;
-       
-    }
-}
 
-@media only screen and (max-width: 652px) {
-    .subdesc {
-        grid-column: 1 / -1;
-    }
-    footer a {
-        background-size: 20%;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .welcome-video-container-after {
-        background-size: 150%;
-    }
-
-    #logo {
-        display: none;
-    }
-
-    header a {
-        margin: 0px;
-        width: auto;
-    }
-
-    #login {
-        width: 100%;
-        justify-content: space-around;
-    }
-
-    footer {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    footer a{
-        background-size: contain;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-}
 .rightfeatureimg1{
     background-image: url('/custom-cover-ft.png');
     grid-column: 4 / -1;
@@ -451,4 +398,108 @@ img{
 }
 .leftfeature a{
     color: white;
+}
+
+.rightfeature {
+    grid-column: 6 / 8;
+}
+
+.leftfeature a{
+    font-size: 15px;
+ }
+
+
+@media only screen and (max-width: 1000px) {
+    .welcome-video-container-after {
+        background-size: 100%;
+    }
+    .create_meeting {
+        
+        grid-column: 1 / -1;
+       
+    }
+}
+
+@media only screen and (max-width: 876px) {
+    .rightfeature{
+        margin-bottom: 20vh;
+    }
+    .rightfeatureimg1{
+        background-size: 120%;
+        grid-column: 1 / -1;
+        height: 50vh;
+      
+        margin: 0px;
+    }
+    .rightfeatureimg3{
+       
+        
+        grid-column: 1 / -1;
+        height: 20vh;
+        margin: 0px;
+    }
+    .leftfeatureimg2{
+        grid-column: 1 / -1;
+        height: 50vh;
+        margin: 0px;
+    }
+    h3, .subdesc{
+        text-align: left;
+        padding: 0px 20px;
+    }
+    .subdesc{
+        font-size: 20px;
+    }
+    .subdesc {
+        grid-column: 1 / -1;
+    }
+    
+}
+
+@media only screen and (max-width: 652px) {
+    
+    footer a {
+        background-size: 20%;
+    }
+}
+
+@media only screen and (max-width: 874px) {
+  .leftfeature, .rightfeature{
+    grid-column: 2 / -2;
+  } 
+  
+}
+
+@media only screen and (max-width: 500px) {
+    .welcome-video-container-after {
+        background-size: 150%;
+    }
+    header{
+        min-height: auto;
+    }
+    #logo {
+        display: none;
+    }
+
+    header a {
+        margin: 0px;
+        width: auto;
+    }
+
+    #login {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    footer a{
+        background-size: contain;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 }
