@@ -28,11 +28,12 @@
         </ul>
     </nav>
     <main>
+        <h1>Prohibited words</h1>
+
         <form action="/admin/forbidden_words/add" method="get" class="form">
             <input required type="text" placeholder="Type word..." name="word" pattern="[a-zA-Z]+" id="word"><input type="submit" value="Forbid">
         </form>
         <div class="words_container">
-        <h1>Prohibited words</h1>
 
         <% for(let word of words) {%>
             <a id="<%= word.id %>" class="wordtag" href="/admin/forbidden_words/delete/<%= word.id %> "><%=word.word%></a>    

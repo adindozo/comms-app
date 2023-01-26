@@ -3,7 +3,7 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik&family=Tenor+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Rubik:wght@300;400&family=Tenor+Sans&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="/icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,13 +21,13 @@
 </head>
 <body>
     <header>
-        comms_
+        comms
     </header>
     <main>
         <div id="snackbar"></div>
         <div class="code">
             
-            <span class="name">meeting "<%= locals.name %>"  code:</span>
+            <span class="name"><%= locals.name %>  code:</span>
             <%= locals.code %> 
         </div>
         <form class="mail_share" action="/send_mail/<%= locals.code %> " method="get">

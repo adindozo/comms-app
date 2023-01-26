@@ -40,9 +40,9 @@ router.post('/', async (req, res) => {
         let email_is_unique = (await pool.query('select email from accounts where email=$1', [email])).rowCount == 0;
         let username_is_unique = (await pool.query('select username from accounts where username=$1', [username])).rowCount == 0;
 
-        if (!email_is_unique) return res.render('register', { email_existing: 'Email already used for other account.' })
+        if (!email_is_unique) return res.render('register', { error: 'Email already used for other account.', email, pw, username })
 
-        if (!username_is_unique) return res.render('register', { username_existing: 'Username already taken.' })
+        if (!username_is_unique) return res.render('register', { error: 'Username already taken.', email, pw, username })
 
 
         //if all good, insert into DB unverified user
@@ -69,17 +69,30 @@ router.post('/', async (req, res) => {
                 pass: process.env.email_pw
             }
         });
+        let link = 'http://' + req.headers.host + '/verify/' + code + '/' + username
 
         let mailOptions = {
             from: process.env.email,
             to: email,
             subject: 'Comms account verification',
-            text: 'http://'+ req.headers.host +'/verify/' + code + '/' + username
+            text: `Dear ${username},
+
+Thank you for registering on Comms! We're excited to have you on board.
+            
+To complete your registration and start using our app, please verify your email by clicking the link below:
+            
+${link}
+            
+            
+If you did not register for an account, please ignore this email.
+            
+Thank you,
+Comms`
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
-            if (error)  console.log(error);
-         
+            if (error) console.log(error);
+
         });
 
 
@@ -89,7 +102,7 @@ router.post('/', async (req, res) => {
         //'not acceptable' code will be sent  
         if (error == 'client-err') return res.sendStatus(406);
         res.sendStatus(500); //500 otherwise
-        console.log(error)
+        console.log(error);
     }
 
 })
@@ -98,5 +111,5 @@ router.get('/', (req, res) => {
     res.render('register');
 })
 
-module.exports=router;
+module.exports = router;
 

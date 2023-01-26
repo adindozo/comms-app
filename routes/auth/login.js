@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
        //hashpw and verified values are required to authenticate user
        
         let password_is_valid = await bcrypt.compare(pw, hashpw);
-        if (!password_is_valid) return res.render('login', { error: 'wrong password. Forgot password?' ,email,pw});
+        if (!password_is_valid) return res.render('login', { error: 'You have entered an incorrect password.' ,email,pw});
         if (!verified) return res.render('login', { error: 'Please verify your email before logging in.' ,email,pw});
         //todo check if user is banned
         let is_banned = Boolean(user.rows[0].banneduntil);

@@ -147,3 +147,8 @@ input[type='submit']:hover{
     text-align: center;
     margin-bottom: 20px;
 }
+
+.info{
+    opacity: 0.7;
+    margin: 10px 0px;
+}

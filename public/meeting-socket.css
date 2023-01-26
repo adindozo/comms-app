@@ -236,3 +236,20 @@ body{
     background-size: cover;
     background-position: center;
 }
+
+@media only screen and (max-width: 600px) {
+    .comms {
+      display: none;
+    }
+    .question-creation-box, .question_card{
+        width: 350px;
+
+    }
+    input, #question-input{
+        width: 325px;
+    }
+    .sortc{
+        width: 380px;
+
+    }
+}

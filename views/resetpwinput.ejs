@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Tenor+Sans&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Reset password</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #333;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
-    <form action="/resetpassword/codesent" method="post">
-        <label for="code">Enter code sent to <%= locals.email %>. </label>
-        <input type="number" id="code" name="code">
+    <main>
+        <form action="/resetpassword/codesent" method="post">
+            <label for="code">Enter code sent to <%= locals.email %>. </label>
+            <input required type="number" id="code" name="code">
 
-        <label for="password">Enter new password</label>
-        <input type="password" id="password" name="password">
-        <%= locals.error %> 
-        <input type="submit" value="Reset password">
+            <label for="password">Enter new password</label>
+            <input required type="password" id="password" name="password">
+            <%= locals.error %>
+                <input type="submit" value="Reset password">
 
-        <input type="email" value="<%= locals.email %>" name="email" id="email" style="display: none;">
-    </form>
+                <input type="email" value="<%= locals.email %>" name="email" id="email" style="display: none;">
+        </form>
+    </main>
 </body>
+
 </html>

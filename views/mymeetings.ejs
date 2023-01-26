@@ -2,9 +2,12 @@
 <html lang="en">
 
 <head>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Rubik:wght@300;400&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Rubik:wght@300;400&family=Tenor+Sans&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +18,7 @@
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
         rel="stylesheet" />
-    <script defer>let account_id = <%= locals.account_id %></script> 
+    <script defer>let account_id = <%= locals.account_id %></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
@@ -26,20 +29,22 @@
     <script defer src="/mymeetings-client.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="mymeetings.css">
-    
+
 </head>
 
 <body>
     <header>
         <span id="logo">comms</span>
-        <a id="user_button" href="/mymeetings"><%= locals.username %>'s meetings</a>
+        <a id="user_button" href="/mymeetings">
+            <%= locals.username %>'s meetings
+        </a>
         <div id="login"><a id="logout" href="/logout">Log out</a></div>
     </header>
     <main>
         <div id="snackbar"></div>
         <button id="new-meeting-button">+ new meeting</button>
         <div id="new_meeting">
-            
+
             <form action="/mymeetings/add_meeting" method="post" id="form">
                 <div id="x"></div>
                 <label for="name">Meeting name</label>
@@ -51,7 +56,7 @@
 
 
                 <label for="unixend">Lasts until</label>
-                <input required type="datetime-local" name="unixend" id="unixend" >
+                <input required type="datetime-local" name="unixend" id="unixend">
 
                 <label for="cover">Meeting cover photo (aspect ratio 16:9, leave blank for default):</label>
                 <input type="file" name="cover" id="cover" class="filepond">
@@ -72,13 +77,19 @@
                     <div class="three_dots"></div>
                 </div>
             </li> -->
-            
-           
+
+
         </ul>
     </main>
     <footer>
         <span>© 2022 Comms Platform, Inc. Developed by Adin Đozo</span>
     </footer>
+    <script>
+            document.getElementById("logo").addEventListener("click", function () {
+                window.location.href = "/";
+                console.log(2)
+            });
+    </script>
 </body>
 
 </html>
