@@ -146,8 +146,6 @@ router.get('/stats/:code',async (req,res) => {
     if(!meetingid) return res.render('no-meeting',{code, error: 'Unfortunately, there is no such event active right now.'})
     //after this line is code for available meeting
     let questions = (await pool.query('select question, answered, username from questions where meetingid=$1',[meetingid])).rows;
-    console.log(meetingid)
-    console.log(questions)
     res.render('meeting_stats',{meetingid, questions});
 })
 

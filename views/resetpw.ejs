@@ -4,34 +4,30 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Rubik:wght@300;400&family=Tenor+Sans&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset password</title>
-    <style>
-        *{
-            margin: 0px;
-            padding: 0px;
-        }
-        main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #333;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="resetpw.css">
+   
 </head>
 
 <body>
+    <header>
+        <span id="logo">comms</span>
+
+    </header>
     <main>
         <form action="/resetpassword" method="POST">
-            <label for="email">Enter your email.</label>
-            <input type="email" name="email" id="email">
+            <p class="signin">Reset password</p>
+
+            <label for="email">Enter your email</label>
+            <input type="email" name="email" id="email" pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'>
             <input type="submit" value="Send code">
         </form>
     </main>

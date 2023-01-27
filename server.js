@@ -138,7 +138,6 @@ io.on('connection', (socket) => {
         try {
             await pool.query('update questions set likesnumber = $1 where questionid = $2',[n,question_id]);
             io.emit('update_like_count_fromServer',question_id,n);
-            console.log(question_id)
         } catch (error) {
             console.log(error)
         }
