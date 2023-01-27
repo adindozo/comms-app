@@ -41,12 +41,6 @@ build/Release
 node_modules/
 jspm_packages/
 
-# User pictures
-# exclude everything
-meeting_pictures/*
-
-# exception to the rule
-!meeting_pictures/.gitkeep 
 
 
 
