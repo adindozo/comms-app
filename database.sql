@@ -36,4 +36,11 @@ create table questions(
     meetingID int references meetings ON DELETE CASCADE
 );
 
--- admin@comms.com Admin123
+create table forbidden_words (
+        id serial primary key not null,
+        word varchar(45) not null
+
+);
+
+
+-- admin@comms.com Admin123 username and pw for admin
