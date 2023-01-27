@@ -42,7 +42,12 @@ node_modules/
 jspm_packages/
 
 # User pictures
-meeting_pictures/
+# exclude everything
+meeting_pictures/*
+
+# exception to the rule
+!meeting_pictures/.gitkeep 
+
 
 
 # TypeScript v1 declaration files
