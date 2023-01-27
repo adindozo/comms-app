@@ -254,7 +254,6 @@ function create_meeting_card(json_meeting) {
             if (res.ok) {
                 document.getElementById(id + 'li').remove();
             } else {
-                console.log(res)
                 show_snackbar('Unfortunately, an unknown error occurred.');
             }
         } catch (error) {

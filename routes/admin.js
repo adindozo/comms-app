@@ -75,7 +75,6 @@ router.get('/meetings',async (req,res) => { //show meeting table
  router.get('/forbidden_words', async (req,res) => {
     try {
         let words = (await pool.query('select * from forbidden_words')).rows;
-        console.log(words);
         res.render('admin_forbidden_words',{words});
     } catch (error) {
         console.log(error);

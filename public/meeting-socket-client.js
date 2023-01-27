@@ -5,7 +5,6 @@ if(custom_cover_photo){
     document.querySelector('body').style.backgroundImage=(`radial-gradient(rgba(4, 41, 58, 0.98), rgba(4, 41, 58, 0.72)), url('/meeting_pictures/${id}.jpeg')`);
     document.querySelector('main').style.backgroundColor=(`transparent`);
 }
-console.log(id);
 let sortby = 'time';//2 values for sortby: time and likes. Default 'time'. If value is time new questions are added by LIFO stack, otherwise FIFO queue
 document.getElementById('sort').addEventListener('change',(e)=>{
     sortby=e.target.value; //time/likes
@@ -95,7 +94,6 @@ function create_question_card(question) { // function dependent upon value sortb
         }
         n = parseInt(like_button.innerText);
         let question_id=e.target.parentNode.parentNode.id;
-        console.log('likeevent')
         socket.emit('update_like_count', question_id, n);
 
     })
