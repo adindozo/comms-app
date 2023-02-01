@@ -16,7 +16,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const port = 8080;
+const port = process.env.PORT || 8080;
 app.use(nocache()); //disabling cache fixes some logging in related bugs
 
 let dbconfig = { //database credentials stored in object
@@ -200,6 +200,6 @@ let admin_auth_middleware = (req,res,next)=>{
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
 
-server.listen(8080, () => {
-    console.log('listening on port 8080');
+server.listen(port, () => {
+    console.log('listening on port'+port);
 });
