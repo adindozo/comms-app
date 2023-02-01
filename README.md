@@ -1,4 +1,5 @@
 # comms-app
+Tech stack:
 Node.js / Express / EJS / Database as a service (DBaaS) https://www.elephantsql.com/
 
 Welcome to the Comms full stack application! Here's a quick guide on how to get started:
