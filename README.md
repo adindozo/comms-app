@@ -1,7 +1,7 @@
 # comms-app
 
 Tech stack:
-Node.js / Express / EJS / Database as a service (DBaaS) https://www.elephantsql.com/
+Node.js / Express / EJS / pgsql database as a service (DBaaS) https://www.elephantsql.com/
 
 Demo video (app is not hosted): https://www.youtube.com/embed/llKvEosm8lM?start=151
 
