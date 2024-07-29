@@ -71,9 +71,9 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-.env.test
+# dotenv environment variables file (since ElephantSQL is about to be discontinued, env file will be available and db will be hosted locally, no point in using DBAAS)
+# .env
+# .env.test
 
 .txt
 
